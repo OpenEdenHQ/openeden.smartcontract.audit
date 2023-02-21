@@ -31,11 +31,12 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         uint256 decimals;
     }
 
-    struct ChainkLinkParameters {
+    struct ChainlinkParameters {
         bytes32 jobId;
         uint256 fee;
         string urlData;
         string pathToOffchainAssets;
+        string pathToTotalOffchainAssetAtLastClose;
     }
 
     struct RequestData {
@@ -57,7 +58,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     }
     enum Action { Deposit, Withdraw, EpochUpdate, WithdrawalQueue }
 
-    ChainkLinkParameters private _chainkLinkParameters;
+    ChainlinkParameters public _chainLinkParameters;
 
     uint256 public immutable bpsUnit = 10000;
     uint256 public _exchangeRateDecimal;
@@ -109,15 +110,19 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     event SetChainlinkOracleAddress(address newAddress);
     event ProcessDeposit(address receiver, uint256 assets, uint256 shares,
         uint256 exchangeRate, bytes32 requestId, uint256 txsFee, address feeTo);
-    event RequestProcessEpochUpdate(address caller, bytes32 requestId);
+    event RequestUpdateEpoch(address caller, bytes32 requestId);
     event RequestWithdrawalQueue(address caller, bytes32 requestId);
     event RequestDeposit(address receiver, uint256 assets, bytes32 requestId);
     event RequestWithdraw(address receiver, uint256 shares, bytes32 requestId);
     event Fulfill(address investor, bytes32 requestId, uint256 totalOffChainAssets, uint256 exchangeRate, uint256 amount, Action action);
     event UpdateExchangeRateDecimal(uint256 exchangeRateDecimal);
     event WithdrawVault(address receiver, uint256 assets, uint256 shares, uint256 exchangeRate, bytes32 requestId);
-    // event SetChainkLinkURLData(string url);
-    // event SetPathToOffchainAssets(string path);
+    event SetChainlinkURLData(string url);
+    event SetPathToOffchainAssets(string path);
+    event SetPathToTotalOffchainAssetAtLastClose(string path);
+    event SetChainlinkJobId(bytes32 jobId);
+    event SetChainlinkFee(uint256 fee);
+
 
     // constructor 
     constructor (
@@ -126,7 +131,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         address feeTo,
         address coinbaseAccount, // coinbase account
         VaultParameters memory vaultParams,
-        ChainkLinkParameters memory chainlinkParams,
+        ChainlinkParameters memory chainlinkParams,
         address chainlinkToken,
         address chainlinkOracle
     ) ERC4626(IERC20Metadata(asset_)) ERC20("OpenEden T-Bills", "TBILL")
@@ -134,10 +139,11 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         require(coinbaseAccount != address(0) && feeTo != address(0) , "invalid parameters");
         setChainlinkOracle(chainlinkOracle);
         setChainlinkToken(chainlinkToken);
-        _chainkLinkParameters.fee = chainlinkParams.fee;
-        _chainkLinkParameters.jobId = chainlinkParams.jobId;
-        _chainkLinkParameters.urlData = chainlinkParams.urlData;
-        _chainkLinkParameters.pathToOffchainAssets = chainlinkParams.pathToOffchainAssets;
+        _chainLinkParameters.fee = chainlinkParams.fee;
+        _chainLinkParameters.jobId = chainlinkParams.jobId;
+        _chainLinkParameters.urlData = chainlinkParams.urlData;
+        _chainLinkParameters.pathToOffchainAssets = chainlinkParams.pathToOffchainAssets;
+        _chainLinkParameters.pathToTotalOffchainAssetAtLastClose = chainlinkParams.pathToTotalOffchainAssetAtLastClose;
 
         _vaultParameters.transactionFeeWeekdayRate = vaultParams.transactionFeeWeekdayRate;
         _vaultParameters.transactionFeeWeekendRate = vaultParams.transactionFeeWeekendRate;
@@ -312,9 +318,9 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         return 0;
     }
 
-    function processEpochUpdate() external /* whenPaused */ onlyAdminOrOperator {
+    function requestUpdateEpoch() external /* whenPaused */ onlyAdminOrOperator {
         bytes32 requestId = _requestTotalOffchainAssets(0, Action.EpochUpdate);
-        emit RequestProcessEpochUpdate(msg.sender, requestId);
+        emit RequestUpdateEpoch(msg.sender, requestId);
     }
 
     function processWithdrawalQueue() external onlyAdminOrOperator {
@@ -377,21 +383,25 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
             "invalid action"
         );
         Chainlink.Request memory req = buildChainlinkRequest(
-            _chainkLinkParameters.jobId,
+            _chainLinkParameters.jobId,
             address(this),
             this.fulfill.selector
         );
         // Set the URL to perform the GET request on
         req.add(
             "get",
-            _chainkLinkParameters.urlData // offchain assets url
+            _chainLinkParameters.urlData // offchain assets url
         );
-        req.add("path", _chainkLinkParameters.pathToOffchainAssets);
+        if( action == Action.EpochUpdate)
+            req.add("path", _chainLinkParameters.pathToTotalOffchainAssetAtLastClose);
+        else {
+            req.add("path", _chainLinkParameters.pathToOffchainAssets);
+        }
         // Multiply the result by decimals
         int256 timesAmount = int256(10 ** _vaultParameters.decimals);
         req.addInt("times", timesAmount);
         RequestData memory requestData = RequestData(msg.sender, amount, action);
-        requestId = sendChainlinkRequest(req, _chainkLinkParameters.fee);
+        requestId = sendChainlinkRequest(req, _chainLinkParameters.fee);
         _requestIdToRequestData[requestId] = requestData;
     }
 
@@ -522,26 +532,33 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         emit SetChainlinkOracleAddress(newAddress);
     }
 
-    function setChainkLinkFee(uint256 fee) external onlyAdminOrOperator /* whenPaused */ {
-        _chainkLinkParameters.fee = fee;
-        // emit event
+    function setChainlinkFee(uint256 fee) external onlyAdminOrOperator /* whenPaused */ {
+        _chainLinkParameters.fee = fee;
+        emit SetChainlinkFee(fee);
     }
 
-    function setChainkLinkJobId(bytes32 jobId) external onlyAdminOrOperator /* whenPaused */ {
-        _chainkLinkParameters.jobId = jobId;
-        // emit event
+    function setChainlinkJobId(bytes32 jobId) external onlyAdminOrOperator /* whenPaused */ {
+        _chainLinkParameters.jobId = jobId;
+        emit SetChainlinkJobId(jobId);
+
     }
 
-    function setChainkLinkURLData(string memory url) external onlyAdminOrOperator /* whenPaused */ {
-        _chainkLinkParameters.urlData = url;
+    function setChainlinkURLData(string memory url) external onlyAdminOrOperator /* whenPaused */ {
+        _chainLinkParameters.urlData = url;
+        emit SetChainlinkURLData(url);
     }
 
     function setPathToOffchainAssets(string memory path) external onlyAdminOrOperator /* whenPaused */ {
-        _chainkLinkParameters.pathToOffchainAssets = path;
+        _chainLinkParameters.pathToOffchainAssets = path;
+        emit SetPathToOffchainAssets(path);
+    }
+
+    function setPathToTotalOffchainAssetAtLastClose(string memory path) external onlyAdminOrOperator /* whenPaused */ {
+        _chainLinkParameters.pathToTotalOffchainAssetAtLastClose = path;
+        emit SetPathToTotalOffchainAssetAtLastClose(path);
     }
 
     function _updateQueueWithdrawal(address investor, uint256 shares, bytes32 requestId) internal virtual  {
-
         uint256 index = _queueCounter;
         _queueCounter++;
         WithdrawalInfo memory withdrawalInfo = WithdrawalInfo(investor, shares, index);
@@ -593,12 +610,12 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     }
 
     // update batch trade execution
-    function _updateEpochData(uint256 totalOffchainAssets, bytes32 requestId) internal {
+    function _updateEpochData(uint256 totalOffchainAssetAtLastClose, bytes32 requestId) internal {
         _updateEpoch();
         // update total IBKR Assets(USD)
-        _totalOffchainAssets[_epoch] = totalOffchainAssets;
+        _totalOffchainAssets[_epoch] = totalOffchainAssetAtLastClose;
         // calculate total usd assets(onchain usdc + off-chain IBKR(USD))
-        _totalOEAssets[_epoch] = totalAssets() + totalOffchainAssets; 
+        _totalOEAssets[_epoch] = totalAssets() + totalOffchainAssetAtLastClose; 
         // update daily management fee: dailyManagementFee = TVL * (managementFeeRate/365)
         _dailyManagementFee[_epoch] = (_totalOEAssets[_epoch] *  _vaultParameters.managementFeeRate) / (365 * bpsUnit);
        
@@ -611,7 +628,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         _feeClaimable += _dailyManagementFee[_epoch];
        
         // update exchange rate: (Total Assets - Management Fee Claimable) / Total Share Tokens
-        _exchangeRate[_epoch] = previewExchangeRate(totalOffchainAssets); 
+        _exchangeRate[_epoch] = previewExchangeRate(totalOffchainAssetAtLastClose); 
         
         // emit event
         emit UpdateEpochData(
