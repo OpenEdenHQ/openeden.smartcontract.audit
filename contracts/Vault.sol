@@ -10,7 +10,7 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "hardhat/console.sol";
 
 
-contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, ChainlinkClient {
+contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, ChainlinkClient{
     using Chainlink for Chainlink.Request;
     using Math for uint256;
     using Counters for Counters.Counter;
@@ -27,7 +27,8 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         uint256 maxDeposit; // max deposit on a day
         uint256 maxWithdraw; // max withdraw on a day
         uint256 targetReservesLevel; // 10%
-        uint256 managementFeeRate; // 40 bps
+        uint256 onchainServiceFeeRate; // 40 bps
+        uint256 offchainServiceFeeRate; // 40 bps
         uint256 decimals;
     }
 
@@ -64,8 +65,9 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     uint256 public _exchangeRateDecimal;
     uint256 public _minTxsFee;
     VaultParameters public _vaultParameters; // parameters in vault
-    address public _feeTo; // address receive service fee
-    uint256 public _feeClaimable; // available amount admin can redeem 
+    address public _oplServiceProvider; // address receive service fee
+    uint256 public _onchainServiceFeeClaimable; // available amount admin can redeem 
+    uint256 public _offchainServiceFeeClaimable; // available amount admin can redeem 
     address public _operatorAddress; // address of the operator
     uint256 public _epoch; // epoch
     address public _coinbaseAccount; // coinbase account
@@ -76,7 +78,10 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     mapping (bytes32 => RequestData) public _requestIdToRequestData; // requestId => RequestData
 
     mapping(address => bool) public _isWhitelist; // check investor whitelist or not
-    mapping(uint256 => uint256) public _dailyManagementFee; //   TVL * (managementFeeRate/365)
+    mapping(address => bool) public _banned; // check investor banned or not
+    mapping(uint256 => uint256) public _onchainServiceFee; //   usdtOnchain * (onchainServiceFeeRate/365)
+    mapping(uint256 => uint256) public _offchainServiceFee; //   totalOffchainAssets * (offchainServiceFeeRate/365)
+
     mapping(address => mapping(uint256 => uint256)) public _depositAmount; // account => [epoch => depositAmount]
     mapping(address => mapping(uint256 => uint256)) public _withdrawAmount; // account => [epoch => depositAmount]
     mapping(address => bool) public _firstDeposit;
@@ -84,6 +89,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     event UpdateMinTxsFee(uint256 newValue);
     event UpdateCoinbaseAccount(address newAddress);
     event WhiteListInvestor(address investor, bool status);
+    event BansInvestor(address investor, bool status);
     event RemoveWhilelist(address investor);
     event SetTransactionFee(uint256 transactionFee);
     event SetTransactionFeeWeekdayRate(uint256 transactionFeeWeekdayRate);
@@ -93,11 +99,13 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     event SetMaxDeposit(uint256 maxDeposit);
     event SetMaxWithdraw(uint256 maxWithdraw);
     event SetTargetReservesLevel(uint256 targetReservesLevel);
-    event SetManagementFeeRate(uint256 managementFeeRate);
+    event SetOnchainServiceFeeRate(uint256 onchainServiceFeeRate);
+    event SetOffchainServiceFeeRate(uint256 offchainServiceFeeRate);
     event SetDecimals(uint256 decimals);
-    event ClaimManagementFee(address receiver, uint256 amount);
-    event SetFeeTo(address feeTo);
-    event UpdateEpochData(uint256 totalOEAssets, uint256 dailyManagementFee, uint256 totalOffchainAssets, uint256 transactionFee, uint256 feeClaimable, uint256 exchangeRate, uint256 epoch, bytes32 requestId);
+    event ClaimOnchainServiceFee(address caller, address receiver, uint256 amount);
+    event ClaimOffchainServiceFee(address caller, address receiver, uint256 amount);
+    event SetOplServiceProvider(address oplServiceProvider);
+    event UpdateEpochData(uint256 totalOEAssets, uint256 onchainServiceFee, uint256 offchainServiceFee,uint256 totalOffchainAssets, uint256 transactionFee, uint256 onchainFeeClaimable, uint256 offchainFeeClaimable, uint256 exchangeRate, uint256 epoch, bytes32 requestId);
     event NewOperatorAddress(address operator);
     event Pause(address caller);
     event Unpause(address caller);
@@ -109,7 +117,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     event SetChainlinkTokenAddress(address newAddress);
     event SetChainlinkOracleAddress(address newAddress);
     event ProcessDeposit(address receiver, uint256 assets, uint256 shares,
-        uint256 exchangeRate, bytes32 requestId, uint256 txsFee, address feeTo);
+        uint256 exchangeRate, bytes32 requestId, uint256 txsFee, address oplServiceProvider);
     event RequestUpdateEpoch(address caller, bytes32 requestId);
     event RequestWithdrawalQueue(address caller, bytes32 requestId);
     event RequestDeposit(address receiver, uint256 assets, bytes32 requestId);
@@ -123,12 +131,11 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     event SetChainlinkJobId(bytes32 jobId);
     event SetChainlinkFee(uint256 fee);
 
-
     // constructor 
     constructor (
         address asset_,
         address operatorAddress,
-        address feeTo,
+        address oplServiceProvider,
         address coinbaseAccount, // coinbase account
         VaultParameters memory vaultParams,
         ChainlinkParameters memory chainlinkParams,
@@ -136,7 +143,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         address chainlinkOracle
     ) ERC4626(IERC20Metadata(asset_)) ERC20("OpenEden T-Bills", "TBILL")
     {
-        require(coinbaseAccount != address(0) && feeTo != address(0) , "invalid parameters");
+        require(coinbaseAccount != address(0) && oplServiceProvider != address(0) , "invalid parameters");
         setChainlinkOracle(chainlinkOracle);
         setChainlinkToken(chainlinkToken);
         _chainLinkParameters.fee = chainlinkParams.fee;
@@ -154,13 +161,15 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         _vaultParameters.maxDeposit = vaultParams.maxDeposit;
         _vaultParameters.maxWithdraw = vaultParams.maxWithdraw;
         _vaultParameters.targetReservesLevel = vaultParams.targetReservesLevel;
-        _vaultParameters.managementFeeRate = vaultParams.managementFeeRate;
+        _vaultParameters.onchainServiceFeeRate = vaultParams.onchainServiceFeeRate;
+        _vaultParameters.offchainServiceFeeRate = vaultParams.offchainServiceFeeRate;
+
         _vaultParameters.firstDeposit = vaultParams.firstDeposit;
         _vaultParameters.decimals = vaultParams.decimals;
 
         _exchangeRateDecimal = 10 ** _vaultParameters.decimals;
         _operatorAddress = operatorAddress;
-        _feeTo = feeTo;
+        _oplServiceProvider = oplServiceProvider;
         _exchangeRate[_epoch] = 1 * _exchangeRateDecimal; // 1 : 1
         _coinbaseAccount = coinbaseAccount;
         _withdrawalQueue.first = 1;
@@ -169,10 +178,22 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     }
 
     // add/remove investor whitelist (only admin)
-    function whitelistInvestor(address investor, bool status) onlyAdminOrOperator external {
+    function whitelistInvestor(address investor, bool status) onlyOwner public {
         _isWhitelist[investor] = status;
         emit WhiteListInvestor(investor, status);
     }
+
+    function bansInvestor(address investor, bool status) onlyOwner external {
+        require(_banned[investor] != status, "already banned or already unband");
+        _banned[investor] = status;
+        if(status  && _isWhitelist[investor]) {
+            whitelistInvestor(investor, false); // remove whitelist 
+        } else if (!status  && !_isWhitelist[investor]){
+            whitelistInvestor(investor, true); // remove whitelist 
+        }
+        emit BansInvestor(investor, status);
+    }
+
 
     function setTransactionFee(uint256 transactionFee) onlyAdminOrOperator whenPaused external {
         _vaultParameters.transactionFee =  transactionFee;
@@ -215,9 +236,14 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         emit SetTargetReservesLevel(targetReservesLevel);
     }
 
-    function setManagementFeeRate(uint256 managementFeeRate) onlyAdminOrOperator whenPaused external {
-        _vaultParameters.managementFeeRate =  managementFeeRate;
-        emit SetManagementFeeRate(managementFeeRate);
+    function setOnchainServiceFeeRate(uint256 onchainServiceFeeRate) onlyAdminOrOperator whenPaused external {
+        _vaultParameters.onchainServiceFeeRate =  onchainServiceFeeRate;
+        emit SetOnchainServiceFeeRate(onchainServiceFeeRate);
+    }
+
+    function setOffchainServiceFeeRate(uint256 offchainServiceFeeRate) onlyAdminOrOperator whenPaused external {
+        _vaultParameters.offchainServiceFeeRate =  offchainServiceFeeRate;
+        emit SetOffchainServiceFeeRate(offchainServiceFeeRate);
     }
 
     function setDecimals(uint256 decimal) onlyAdminOrOperator whenPaused external {
@@ -231,9 +257,9 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     }
 
     // set address reveive service fee (only admin)
-    function setFeeTo(address feeTo) /*onlyOwner*/ onlyAdminOrOperator external {
-        _feeTo = feeTo;
-        emit SetFeeTo(feeTo);
+    function setOplServiceProvider(address oplServiceProvider) /*onlyOwner*/ onlyAdminOrOperator external {
+        _oplServiceProvider = oplServiceProvider;
+        emit SetOplServiceProvider(oplServiceProvider);
     }
 
     // set address reveive service fee (only admin)
@@ -252,6 +278,11 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
 
     modifier onlyWhitelist(address investor) {
         require(_isWhitelist[investor], "only investor in whitelist");
+        _;
+    }
+
+    modifier onlyNotBanned(address investor) {
+        require(!_banned[investor], "only investor not banned");
         _;
     }
 
@@ -442,11 +473,11 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         // mint shares to inverstor and transfer net usdc(assets - txsFee(assets) to vault
         _deposit(investor, investor, assets - txsFee(assets), shares);
         // trasfer txs fee to fee receiver
-        SafeERC20.safeTransferFrom(_asset, investor, _feeTo, txsFee(assets));
+        SafeERC20.safeTransferFrom(_asset, investor, _oplServiceProvider, txsFee(assets));
         if(_firstDeposit[investor] == false) {
            _firstDeposit[investor] = true; 
         }
-        emit ProcessDeposit(investor, assets, shares, exchangeRate, requestId, txsFee(assets), _feeTo);
+        emit ProcessDeposit(investor, assets, shares, exchangeRate, requestId, txsFee(assets), _oplServiceProvider);
     }
 
     function _processWithdraw(address investor, uint256 shares, uint256 exchangeRate, bytes32 requestId) internal {
@@ -606,7 +637,7 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
     }
 
     function previewExchangeRate(uint256 totalOffchainAssets) public view virtual returns (uint256) {
-        return (totalOffchainAssets + totalAssets() - _feeClaimable) * _exchangeRateDecimal / totalSupply(); 
+        return (totalOffchainAssets + totalAssets() - _onchainServiceFeeClaimable - _offchainServiceFeeClaimable) * _exchangeRateDecimal / totalSupply(); 
     }
 
     // update batch trade execution
@@ -616,16 +647,19 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         _totalOffchainAssets[_epoch] = totalOffchainAssetAtLastClose;
         // calculate total usd assets(onchain usdc + off-chain IBKR(USD))
         _totalOEAssets[_epoch] = totalAssets() + totalOffchainAssetAtLastClose; 
-        // update daily management fee: dailyManagementFee = TVL * (managementFeeRate/365)
-        _dailyManagementFee[_epoch] = (_totalOEAssets[_epoch] *  _vaultParameters.managementFeeRate) / (365 * bpsUnit);
-       
+        // update daily service fee
+       _onchainServiceFee[_epoch] = (_asset.balanceOf(address(this)) *  _vaultParameters.onchainServiceFeeRate) / (365 * bpsUnit);
+       _offchainServiceFee[_epoch] = (totalOffchainAssetAtLastClose *  _vaultParameters.offchainServiceFeeRate) / (365 * bpsUnit);
+
        // update transactionFee base on weekday
-        _vaultParameters.transactionFee = isWeekday() 
+        _vaultParameters.transactionFee = isWeekday()
         ? _vaultParameters.transactionFeeWeekdayRate
         : _vaultParameters.transactionFeeWeekendRate;
 
-        // update fee claimable
-        _feeClaimable += _dailyManagementFee[_epoch];
+        // update fee claimable _onchainServiceFeeClaimable
+        _onchainServiceFeeClaimable += _onchainServiceFee[_epoch];
+        _offchainServiceFeeClaimable += _offchainServiceFee[_epoch];
+
        
         // update exchange rate: (Total Assets - Management Fee Claimable) / Total Share Tokens
         _exchangeRate[_epoch] = previewExchangeRate(totalOffchainAssetAtLastClose); 
@@ -633,21 +667,30 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
         // emit event
         emit UpdateEpochData(
             _totalOEAssets[_epoch],
-            _dailyManagementFee[_epoch],
+            _onchainServiceFee[_epoch],
+            _offchainServiceFee[_epoch],
             _totalOffchainAssets[_epoch],
             _vaultParameters.transactionFee,
-            _feeClaimable,
+            _onchainServiceFeeClaimable,
+            _offchainServiceFeeClaimable,
             _exchangeRate[_epoch],
             _epoch,
             requestId
         );
     }
 
-    function claimManagementFee(address receiver, uint256 amount) external /*onlyOwner*/ onlyAdminOrOperator {
-        require(amount <= _feeClaimable && amount <= _asset.balanceOf(address(this)), "claimManagementFee: insuficient amount");
-        _feeClaimable -= amount;
-        SafeERC20.safeTransfer(_asset, receiver, amount);
-        emit ClaimManagementFee(receiver, amount);
+    function claimOnchainServiceFee(uint256 amount) external /*onlyOwner*/ onlyAdminOrOperator {
+        require(amount <= _onchainServiceFeeClaimable && amount <= _asset.balanceOf(address(this)), "claimOnchainServiceFee: insuficient amount");
+        _onchainServiceFeeClaimable -= amount;
+        SafeERC20.safeTransfer(_asset, _oplServiceProvider, amount);
+        emit ClaimOnchainServiceFee(msg.sender, _oplServiceProvider, amount);
+    }
+
+    function claimOffchainServiceFee(uint256 amount) external /*onlyOwner*/ onlyAdminOrOperator {
+        require(amount <= _offchainServiceFeeClaimable && amount <= _asset.balanceOf(address(this)), "claimOffchainServiceFee: insuficient amount");
+        _offchainServiceFeeClaimable -= amount;
+        SafeERC20.safeTransfer(_asset, _oplServiceProvider, amount);
+        emit ClaimOffchainServiceFee(msg.sender, _oplServiceProvider, amount);
     }
  
     // pause trading on cut-off time
@@ -672,6 +715,18 @@ contract OpenEdenVault is ERC4626, Ownable, Pausable, ReentrancyGuard, Chainlink
 
     function decimals() public view virtual override returns (uint8) {
         return uint8(_vaultParameters.decimals);
+    }
+
+    function transfer(address to, uint256 value) override(ERC20, IERC20) public onlyNotBanned(msg.sender) returns (bool ok) {
+        return super.transfer(to, value);
+    }
+
+    function approve(address spender, uint256 value) override(ERC20, IERC20) public onlyNotBanned(msg.sender) returns (bool ok) {
+        return super.approve(spender, value);
+    }
+
+    function transferFrom(address from, address to, uint256 amount) public virtual override(ERC20, IERC20) onlyNotBanned(from)  returns (bool) {
+        return super.transferFrom(from, to, amount);
     }
 
 }
