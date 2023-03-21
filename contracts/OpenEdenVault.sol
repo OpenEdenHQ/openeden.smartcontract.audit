@@ -90,12 +90,12 @@ contract OpenEdenVault is
     }
 
     // pause trading on cut-off time
-    function pause() external onlyAdmin {
+    function pause() external onlyAdminOrOperator {
         _pause();
     }
 
     // unpause after cut-off time
-    function unpause() external onlyAdmin {
+    function unpause() external onlyAdminOrOperator {
         _unpause();
     }
 
@@ -109,6 +109,18 @@ contract OpenEdenVault is
     function setTreasury(address newAddress) external onlyAdmin {
         _treasury = newAddress;
         emit UpdateTreasury(newAddress);
+    }
+
+        // update baseVault address
+    function setBaseVault(address baseVault) external onlyAdmin {
+        _baseVault = IBaseVault(baseVault);
+        emit SetBaseVault(baseVault);
+    }
+
+    // update kycManager address
+    function setKycManager(address kycManager) external onlyAdmin {
+        _kycManager = IKycManager(kycManager);
+        emit SetKycManager(kycManager);
     }
 
     /**

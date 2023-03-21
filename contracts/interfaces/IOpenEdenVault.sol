@@ -7,6 +7,8 @@ interface IOpenEdenVault {
     event UpdateExchangeRateDecimal(uint256 exchangeRateDecimal);
     event SetOplServiceProvider(address oplServiceProvider);
     event UpdateTreasury(address newAddress);
+    event SetBaseVault(address baseVault);
+    event SetKycManager(address kycManager);
 
     event UpdateMinTxsFee(uint256 newValue);
     event ClaimOnchainServiceFee(

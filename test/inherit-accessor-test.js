@@ -34,6 +34,9 @@ describe("Chainlink Oracle", function () {
   const _10k = BigNumber.from("10000000000");
   const _1B = BigNumber.from("1000000000000000");
   const _25$ = BigNumber.from("25000000");
+  const _50$ = BigNumber.from("50000000");
+  const _100$ = BigNumber.from("100000000");
+
 
   const minDepositAmount = _10k;
   const minDeposit = _10k;
@@ -46,6 +49,7 @@ describe("Chainlink Oracle", function () {
   const onchainServiceFeeRate = 40; // 40bps
   const offchainServiceFeeRate = 40; // 40bps
   const minTxsFee = _25$// 25$
+
   const BPSUNIT = 10000;
 
   beforeEach(async function () {
@@ -65,7 +69,6 @@ describe("Chainlink Oracle", function () {
     const chainlinkJobId = ethers.utils.toUtf8Bytes("29fa9aa13bf1468788b7cc4a500a1234")
     const chainlinkFee = "100000000000000000"
     const fundAmount = "10000000000000000000"
-
 
     // deploy base vault contract
     const BaseVault = await ethers.getContractFactory("BaseVault");
@@ -173,6 +176,13 @@ describe("Chainlink Oracle", function () {
   }
 
   describe('basic test by Minh', () => {
+
+    it("update baseVault, kycManager address", async function () {
+      await vault.setBaseVault(newAddress)
+      await expect(await vault._baseVault()).to.equal(newAddress);
+      await vault.setKycManager(newAddress)
+      await expect(await vault._kycManager()).to.equal(newAddress);
+    });
 
     it("deposit and withdraw, queue check ", async function () {
       // deposit
@@ -490,12 +500,12 @@ describe("Chainlink Oracle", function () {
     let onlyOwnerMessage = `AccessControl: account 0x70997970c51812dc3a010c7d01b50e0d17dc79c8 is missing role 0x0000000000000000000000000000000000000000000000000000000000000000`;
     it("pause/unpause operator", async function () {
       await deposit(investor1, firstDepositAmount, "0");
-      await expect(vault.connect(investor1).pause()).to.revertedWith(onlyOwnerMessage);
-      await vault.pause();
+      await expect(vault.connect(investor1).pause()).to.revertedWith("permission denied");
+      await vault.connect(operator).pause();
       await expect(vault.connect(investor1).deposit(firstDepositAmount, investor1.address)).to.revertedWith("Pausable: paused");
       await expect(vault.connect(investor1).withdraw(_50k, investor1.address, investor1.address)).to.revertedWith("Pausable: paused");
-      await expect(vault.connect(investor1).unpause()).to.revertedWith(onlyOwnerMessage);
-      await vault.unpause();
+      await expect(vault.connect(investor1).unpause()).to.revertedWith("permission denied");
+      await vault.connect(operator).unpause();
       await deposit(investor1, firstDepositAmount, "0");
       await withdraw(investor1, _50k, "0");
     });
@@ -612,6 +622,7 @@ describe("Chainlink Oracle", function () {
       await expect(await usdc.balanceOf(investor5.address)).to.equal(_200k);
       // check balance opl account
       await expect(await usdc.balanceOf(usInvestor.address)).to.equal(expectOplAccount);
+
       await expect(await vault._onchainFee()).to.equal(0);
       await expect(await vault._offchainFee()).to.equal(0);
 
@@ -663,6 +674,44 @@ describe("Chainlink Oracle", function () {
       await expect(vault.connect(investor1).processWithdrawalQueue()).to.revertedWith("permission denied");
     });
 
+    it("update new kycManager", async function () {  
+      // deploy kycManager
+      const NewKycManager = await ethers.getContractFactory("KycManager");
+      newKycManager = await NewKycManager.deploy();
+      await newKycManager.deployed();
+      await expect(vault.connect(investor1).setKycManager(newKycManager.address)).to.revertedWith(onlyOwnerMessage);
+      await vault.setKycManager(newKycManager.address);
+      await expect(deposit(investor1, firstDepositAmount, "0")).to.revertedWith("not a kyc user");  // 100k
+    });
+
+    it("update new base vault", async function () {
+      const newTxsFee = 10;
+      const newFirstDepositAmount = 2;
+      const newMinDeposit = 3;
+      const newMaxDeposit = 4;
+      const newMaxWithdraw = 5;
+      const newTargetReserverLevel = 6;
+      const newOnchainFeeRate = 7;
+      const newOffchainFeeRate = 8;
+
+      const BaseVault = await ethers.getContractFactory("BaseVault");
+      const newBaseVault = await BaseVault.deploy(
+        newTxsFee, // 5 bps
+        newFirstDepositAmount,
+        newMinDeposit, // 100000 USDC
+        newMaxDeposit, // max deposit on a day
+        newMaxWithdraw, // max withdraw on a day
+        newTargetReserverLevel, // 10%
+        newOnchainFeeRate, // 40 bps
+        newOffchainFeeRate, // 40 bps
+      );
+      await newBaseVault.deployed();
+      
+      await expect(await vault.txsFee(_100k)).to.equal(_50$);
+      await expect(vault.connect(investor1).setBaseVault(newBaseVault.address)).to.revertedWith(onlyOwnerMessage);
+      await vault.setBaseVault(newBaseVault.address);
+      await expect(await vault.txsFee(_100k)).to.equal(_100$);
+    });
   })
 })
 
