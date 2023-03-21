@@ -1,0 +1,1127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/external/chainlink/ChainlinkClientModified.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">contracts/external/chainlink/</a> ChainlinkClientModified.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">32.26% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>10/31</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>2/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">38.1% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>8/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">40% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>18/45</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+&nbsp;
+import "./Chainlink.sol";
+import "./interfaces/ChainlinkRequestInterface.sol";
+import "./interfaces/ENSInterface.sol";
+import "./interfaces/LinkTokenInterface.sol";
+import "./interfaces/OperatorInterface.sol";
+import "./interfaces/PointerInterface.sol";
+import {ENSResolver as ENSResolver_Chainlink} from "./vendor/ENSResolver.sol";
+&nbsp;
+/**
+ * @title The ChainlinkClient contract
+ * @notice Contract writers can inherit this contract in order to create requests for the
+ * Chainlink network
+ */
+abstract contract ChainlinkClientModified {
+    using Chainlink for Chainlink.Request;
+&nbsp;
+    uint256 internal constant LINK_DIVISIBILITY = 10 ** 18;
+    uint256 private constant AMOUNT_OVERRIDE = 0;
+    address private constant SENDER_OVERRIDE = address(0);
+    uint256 private constant ORACLE_ARGS_VERSION = 1;
+    uint256 private constant OPERATOR_ARGS_VERSION = 2;
+    bytes32 private constant ENS_TOKEN_SUBNAME = keccak256("link");
+    bytes32 private constant ENS_ORACLE_SUBNAME = keccak256("oracle");
+    address private constant LINK_TOKEN_POINTER =
+        0xC89bD4E1632D3A43CB03AAAd5262cbe4038Bc571;
+&nbsp;
+    ENSInterface private s_ens;
+    bytes32 private s_ensNode;
+    LinkTokenInterface private s_link;
+    OperatorInterface private s_oracle;
+    uint256 private s_requestCount;
+    mapping(bytes32 =&gt; address) private s_pendingRequests;
+&nbsp;
+    event ChainlinkRequested(bytes32 indexed id);
+    event ChainlinkFulfilled(bytes32 indexed id);
+    event ChainlinkCancelled(bytes32 indexed id);
+&nbsp;
+    function init() internal {
+        s_requestCount = 1;
+    }
+&nbsp;
+    /**
+     * @notice Creates a request that can hold additional parameters
+     * @param specId The Job Specification ID that the request will be created for
+     * @param callbackAddr address to operate the callback on
+     * @param callbackFunctionSignature function signature to use for the callback
+     * @return A Chainlink Request struct in memory
+     */
+    function buildChainlinkRequest(
+        bytes32 specId,
+        address callbackAddr,
+        bytes4 callbackFunctionSignature
+    ) internal pure returns (Chainlink.Request memory) {
+        Chainlink.Request memory req;
+        return req.initialize(specId, callbackAddr, callbackFunctionSignature);
+    }
+&nbsp;
+    /**
+     * @notice Creates a request that can hold additional parameters
+     * @param specId The Job Specification ID that the request will be created for
+     * @param callbackFunctionSignature function signature to use for the callback
+     * @return A Chainlink Request struct in memory
+     */
+<span class="fstat-no" title="function not covered" >    function buildOperatorRequest(</span>
+        bytes32 specId,
+        bytes4 callbackFunctionSignature
+    ) internal view returns (Chainlink.Request memory) {
+<span class="cstat-no" title="statement not covered" >        Chainlink.Request memory req;</span>
+<span class="cstat-no" title="statement not covered" >        return req.initialize(specId, address(this), callbackFunctionSignature);</span>
+    }
+&nbsp;
+    /**
+     * @notice Creates a Chainlink request to the stored oracle address
+     * @dev Calls `chainlinkRequestTo` with the stored oracle address
+     * @param req The initialized Chainlink Request
+     * @param payment The amount of LINK to send for the request
+     * @return requestId The request ID
+     */
+    function sendChainlinkRequest(
+        Chainlink.Request memory req,
+        uint256 payment
+    ) internal returns (bytes32) {
+        return sendChainlinkRequestTo(address(s_oracle), req, payment);
+    }
+&nbsp;
+    /**
+     * @notice Creates a Chainlink request to the specified oracle address
+     * @dev Generates and stores a request ID, increments the local nonce, and uses `transferAndCall` to
+     * send LINK which creates a request on the target oracle contract.
+     * Emits ChainlinkRequested event.
+     * @param oracleAddress The address of the oracle for the request
+     * @param req The initialized Chainlink Request
+     * @param payment The amount of LINK to send for the request
+     * @return requestId The request ID
+     */
+    function sendChainlinkRequestTo(
+        address oracleAddress,
+        Chainlink.Request memory req,
+        uint256 payment
+    ) internal returns (bytes32 requestId) {
+        uint256 nonce = s_requestCount;
+        s_requestCount = nonce + 1;
+        bytes memory encodedRequest = abi.encodeWithSelector(
+            ChainlinkRequestInterface.oracleRequest.selector,
+            SENDER_OVERRIDE, // Sender value - overridden by onTokenTransfer by the requesting contract's address
+            AMOUNT_OVERRIDE, // Amount value - overridden by onTokenTransfer by the actual amount of LINK sent
+            req.id,
+            address(this),
+            req.callbackFunctionId,
+            nonce,
+            ORACLE_ARGS_VERSION,
+            req.buf.buf
+        );
+        return _rawRequest(oracleAddress, nonce, payment, encodedRequest);
+    }
+&nbsp;
+    /**
+     * @notice Creates a Chainlink request to the stored oracle address
+     * @dev This function supports multi-word response
+     * @dev Calls `sendOperatorRequestTo` with the stored oracle address
+     * @param req The initialized Chainlink Request
+     * @param payment The amount of LINK to send for the request
+     * @return requestId The request ID
+     */
+<span class="fstat-no" title="function not covered" >    function sendOperatorRequest(</span>
+        Chainlink.Request memory req,
+        uint256 payment
+    ) internal returns (bytes32) {
+<span class="cstat-no" title="statement not covered" >        return sendOperatorRequestTo(address(s_oracle), req, payment);</span>
+    }
+&nbsp;
+    /**
+     * @notice Creates a Chainlink request to the specified oracle address
+     * @dev This function supports multi-word response
+     * @dev Generates and stores a request ID, increments the local nonce, and uses `transferAndCall` to
+     * send LINK which creates a request on the target oracle contract.
+     * Emits ChainlinkRequested event.
+     * @param oracleAddress The address of the oracle for the request
+     * @param req The initialized Chainlink Request
+     * @param payment The amount of LINK to send for the request
+     * @return requestId The request ID
+     */
+<span class="fstat-no" title="function not covered" >    function sendOperatorRequestTo(</span>
+        address oracleAddress,
+        Chainlink.Request memory req,
+        uint256 payment
+    ) internal returns (bytes32 requestId) {
+<span class="cstat-no" title="statement not covered" >        uint256 nonce = s_requestCount;</span>
+        s_requestCount = nonce + 1;
+<span class="cstat-no" title="statement not covered" >        bytes memory encodedRequest = abi.encodeWithSelector(</span>
+            OperatorInterface.operatorRequest.selector,
+            SENDER_OVERRIDE, // Sender value - overridden by onTokenTransfer by the requesting contract's address
+            AMOUNT_OVERRIDE, // Amount value - overridden by onTokenTransfer by the actual amount of LINK sent
+            req.id,
+            req.callbackFunctionId,
+            nonce,
+            OPERATOR_ARGS_VERSION,
+            req.buf.buf
+        );
+<span class="cstat-no" title="statement not covered" >        return _rawRequest(oracleAddress, nonce, payment, encodedRequest);</span>
+    }
+&nbsp;
+    /**
+     * @notice Make a request to an oracle
+     * @param oracleAddress The address of the oracle for the request
+     * @param nonce used to generate the request ID
+     * @param payment The amount of LINK to send for the request
+     * @param encodedRequest data encoded for request type specific format
+     * @return requestId The request ID
+     */
+    function _rawRequest(
+        address oracleAddress,
+        uint256 nonce,
+        uint256 payment,
+        bytes memory encodedRequest
+    ) private returns (bytes32 requestId) {
+        requestId = keccak256(abi.encodePacked(this, nonce));
+        s_pendingRequests[requestId] = oracleAddress;
+        emit ChainlinkRequested(requestId);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            s_link.transferAndCall(oracleAddress, payment, encodedRequest),
+            "unable to transferAndCall to oracle"
+        );
+    }
+&nbsp;
+    /**
+     * @notice Allows a request to be cancelled if it has not been fulfilled
+     * @dev Requires keeping track of the expiration value emitted from the oracle contract.
+     * Deletes the request from the `pendingRequests` mapping.
+     * Emits ChainlinkCancelled event.
+     * @param requestId The request ID
+     * @param payment The amount of LINK sent for the request
+     * @param callbackFunc The callback function specified for the request
+     * @param expiration The time of the expiration for the request
+     */
+<span class="fstat-no" title="function not covered" >    function cancelChainlinkRequest(</span>
+        bytes32 requestId,
+        uint256 payment,
+        bytes4 callbackFunc,
+        uint256 expiration
+    ) internal {
+<span class="cstat-no" title="statement not covered" >        OperatorInterface requested = OperatorInterface(</span>
+            s_pendingRequests[requestId]
+        );
+        delete s_pendingRequests[requestId];
+<span class="cstat-no" title="statement not covered" >        emit ChainlinkCancelled(requestId);</span>
+<span class="cstat-no" title="statement not covered" >        requested.cancelOracleRequest(</span>
+            requestId,
+            payment,
+            callbackFunc,
+            expiration
+        );
+    }
+&nbsp;
+    /**
+     * @notice the next request count to be used in generating a nonce
+     * @dev starts at 1 in order to ensure consistent gas cost
+     * @return returns the next request count to be used in a nonce
+     */
+<span class="fstat-no" title="function not covered" >    function getNextRequestCount() internal view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return s_requestCount;</span>
+    }
+&nbsp;
+    /**
+     * @notice Sets the stored oracle address
+     * @param oracleAddress The address of the oracle contract
+     */
+    function setChainlinkOracle(address oracleAddress) internal {
+        s_oracle = OperatorInterface(oracleAddress);
+    }
+&nbsp;
+    /**
+     * @notice Sets the LINK token address
+     * @param linkAddress The address of the LINK token contract
+     */
+    function setChainlinkToken(address linkAddress) internal {
+        s_link = LinkTokenInterface(linkAddress);
+    }
+&nbsp;
+    /**
+     * @notice Sets the Chainlink token address for the public
+     * network as given by the Pointer contract
+     */
+<span class="fstat-no" title="function not covered" >    function setPublicChainlinkToken() internal {</span>
+<span class="cstat-no" title="statement not covered" >        setChainlinkToken(PointerInterface(LINK_TOKEN_POINTER).getAddress())</span>;
+    }
+&nbsp;
+    /**
+     * @notice Retrieves the stored address of the LINK token
+     * @return The address of the LINK token
+     */
+<span class="fstat-no" title="function not covered" >    function chainlinkTokenAddress() internal view returns (address) {</span>
+<span class="cstat-no" title="statement not covered" >        return address(s_link);</span>
+    }
+&nbsp;
+    /**
+     * @notice Retrieves the stored address of the oracle contract
+     * @return The address of the oracle contract
+     */
+<span class="fstat-no" title="function not covered" >    function chainlinkOracleAddress() internal view returns (address) {</span>
+<span class="cstat-no" title="statement not covered" >        return address(s_oracle);</span>
+    }
+&nbsp;
+    /**
+     * @notice Allows for a request which was created on another contract to be fulfilled
+     * on this contract
+     * @param oracleAddress The address of the oracle contract that will fulfill the request
+     * @param requestId The request ID used for the response
+     */
+<span class="fstat-no" title="function not covered" >    function addChainlinkExternalRequest(</span>
+        address oracleAddress,
+        bytes32 requestId
+    ) internal notPendingRequest(requestId) {
+        s_pendingRequests[requestId] = oracleAddress;
+    }
+&nbsp;
+    /**
+     * @notice Sets the stored oracle and LINK token contracts with the addresses resolved by ENS
+     * @dev Accounts for subnodes having different resolvers
+     * @param ensAddress The address of the ENS contract
+     * @param node The ENS node hash
+     */
+<span class="fstat-no" title="function not covered" >    function useChainlinkWithENS(address ensAddress, bytes32 node) internal {</span>
+        s_ens = ENSInterface(ensAddress);
+        s_ensNode = node;
+<span class="cstat-no" title="statement not covered" >        bytes32 linkSubnode = keccak256(</span>
+            abi.encodePacked(s_ensNode, ENS_TOKEN_SUBNAME)
+        );
+<span class="cstat-no" title="statement not covered" >        ENSResolver_Chainlink resolver = ENSResolver_Chainlink(</span>
+            s_ens.resolver(linkSubnode)
+        );
+<span class="cstat-no" title="statement not covered" >        setChainlinkToken(resolver.addr(linkSubnode))</span>;
+<span class="cstat-no" title="statement not covered" >        updateChainlinkOracleWithENS()</span>;
+    }
+&nbsp;
+    /**
+     * @notice Sets the stored oracle contract with the address resolved by ENS
+     * @dev This may be called on its own as long as `useChainlinkWithENS` has been called previously
+     */
+<span class="fstat-no" title="function not covered" >    function updateChainlinkOracleWithENS() internal {</span>
+<span class="cstat-no" title="statement not covered" >        bytes32 oracleSubnode = keccak256(</span>
+            abi.encodePacked(s_ensNode, ENS_ORACLE_SUBNAME)
+        );
+<span class="cstat-no" title="statement not covered" >        ENSResolver_Chainlink resolver = ENSResolver_Chainlink(</span>
+            s_ens.resolver(oracleSubnode)
+        );
+<span class="cstat-no" title="statement not covered" >        setChainlinkOracle(resolver.addr(oracleSubnode))</span>;
+    }
+&nbsp;
+    /**
+     * @notice Ensures that the fulfillment is valid for this contract
+     * @dev Use if the contract developer prefers methods instead of modifiers for validation
+     * @param requestId The request ID for fulfillment
+     */
+<span class="fstat-no" title="function not covered" >    function validateChainlinkCallback(</span>
+        bytes32 requestId
+    )
+        internal
+        recordChainlinkFulfillment(requestId)
+    // solhint-disable-next-line no-empty-blocks
+    {
+&nbsp;
+    }
+&nbsp;
+    /**
+     * @dev Reverts if the sender is not the oracle of the request.
+     * Emits ChainlinkFulfilled event.
+     * @param requestId The request ID for fulfillment
+     */
+    modifier recordChainlinkFulfillment(bytes32 requestId) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            msg.sender == s_pendingRequests[requestId],
+            "Source must be the oracle of the request"
+        );
+        delete s_pendingRequests[requestId];
+        emit ChainlinkFulfilled(requestId);
+        _;
+    }
+&nbsp;
+    /**
+     * @dev Reverts if the request is already pending
+     * @param requestId The request ID for fulfillment
+     */
+<span class="fstat-no" title="function not covered" >    modifier notPendingRequest(bytes32 requestId) {</span>
+<span class="cstat-no" title="statement not covered" >        require(</span>
+            s_pendingRequests[requestId] == address(0),
+            "Request is already pending"
+        );
+        _;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 14:51:27 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/ChainlinkAccessor.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> ChainlinkAccessor.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>18/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>2/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>10/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>34/34</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">51×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
+&nbsp;
+// import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import "./external/chainlink/ChainlinkClientModified.sol";
+import "./interfaces/IChainlinkAccessor.sol";
+import "./interfaces/IOpenEdenVault.sol";
+import "hardhat/console.sol";
+&nbsp;
+abstract contract ChainlinkAccessor is
+    IChainlinkAccessor,
+    ChainlinkClientModified
+{
+    using Chainlink for Chainlink.Request;
+    ChainlinkParameters _params;
+    mapping(bytes32 =&gt; RequestData) internal _requestIdToRequestData; // requestId =&gt; RequestData
+&nbsp;
+    event SetChainlinkOracleAddress(address newAddress);
+    event SetChainlinkJobId(bytes32 jobId);
+    event SetChainlinkFee(uint256 fee);
+    event SetChainlinkURLData(string url);
+    event SetPathToOffchainAssets(string path);
+    event SetPathToTotalOffchainAssetAtLastClose(string path);
+&nbsp;
+    /*//////////////////////////////////////////////////////////////
+                     !!!NOTE!!! MUST BE IMPLEMENTED
+    //////////////////////////////////////////////////////////////*/
+&nbsp;
+    function setChainlinkOracleAddress(address newAddress) external virtual;
+&nbsp;
+    function setChainlinkFee(uint256 fee) external virtual;
+&nbsp;
+    function setChainlinkJobId(bytes32 jobId) external virtual;
+&nbsp;
+    function setChainlinkURLData(string memory url) external virtual;
+&nbsp;
+    function setPathToOffchainAssets(string memory path) external virtual;
+&nbsp;
+    function setPathToTotalOffchainAssetAtLastClose(
+        string memory path
+    ) external virtual;
+&nbsp;
+    /**
+     * @dev Initializes Chainlink parameters, token, and oracle.
+     * @param params Chainlink parameters containing fee, jobId, urlData, and paths.
+     * @param chainlinkToken Address of the Chainlink token.
+     * @param chainlinkOracle Address of the Chainlink oracle.
+     */
+    function init(
+        ChainlinkParameters memory params,
+        address chainlinkToken,
+        address chainlinkOracle
+    ) internal {
+        _params.fee = params.fee;
+        _params.jobId = params.jobId;
+        _params.urlData = params.urlData;
+        _params.pathToOffchainAssets = params.pathToOffchainAssets;
+        _params.pathToTotalOffchainAssetAtLastClose = params
+            .pathToTotalOffchainAssetAtLastClose;
+        setChainlinkOracle(chainlinkOracle);
+        setChainlinkToken(chainlinkToken);
+        super.init();
+    }
+&nbsp;
+    function _requestTotalOffchainAssets(
+        address investor,
+        uint256 amount,
+        Action action,
+        uint8 decimals
+    ) internal returns (bytes32 requestId) {
+        Chainlink.Request memory req = buildChainlinkRequest(
+            _params.jobId,
+            // !NOTE: what we set here will be ignored and replace by address(this) during encode
+            address(0),
+            IOpenEdenVault(address(this)).fulfill.selector
+        );
+        // Set the URL to perform the GET request on
+        req.add(
+            "get",
+            _params.urlData // offchain assets url
+        );
+        if (action == Action.EPOCH_UPDATE)
+            req.add("path", _params.pathToTotalOffchainAssetAtLastClose);
+        else {
+            req.add("path", _params.pathToOffchainAssets);
+        }
+        // Multiply the result by decimals
+        int256 timesAmount = int256(10 ** decimals);
+        req.addInt("times", timesAmount);
+        RequestData memory requestData = RequestData(investor, amount, action);
+&nbsp;
+        requestId = sendChainlinkRequest(req, _params.fee);
+&nbsp;
+        // TODO
+        _requestIdToRequestData[requestId] = requestData;
+        // console.log("request send successfully!");
+    }
+&nbsp;
+    function getChainLinkParameters()
+        external
+        view
+        returns (ChainlinkParameters memory params)
+    {
+        params = _params;
+    }
+&nbsp;
+    function getRequestData(
+        bytes32 requestId
+    ) public view returns (address investor, uint256 amount, Action action) {
+        investor = _requestIdToRequestData[requestId].investor;
+        amount = _requestIdToRequestData[requestId].amount;
+        action = _requestIdToRequestData[requestId].action;
+    }
+&nbsp;
+    /*//////////////////////////////////////////////////////////////
+                     INTERNAL IMPLEMENTATION FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+&nbsp;
+    function _setChainlinkOracleAddress(address newAddress) internal {
+        super.setChainlinkOracle(newAddress);
+        emit SetChainlinkOracleAddress(newAddress);
+    }
+&nbsp;
+    function _setChainlinkFee(uint256 fee) internal {
+        _params.fee = fee;
+        emit SetChainlinkFee(fee);
+    }
+&nbsp;
+    function _setChainlinkJobId(bytes32 jobId) internal {
+        _params.jobId = jobId;
+        emit SetChainlinkJobId(jobId);
+    }
+&nbsp;
+    function _setChainlinkURLData(string memory url) internal {
+        _params.urlData = url;
+        emit SetChainlinkURLData(url);
+    }
+&nbsp;
+    function _setPathToOffchainAssets(string memory path) internal {
+        _params.pathToOffchainAssets = path;
+        emit SetPathToOffchainAssets(path);
+    }
+&nbsp;
+    function _setPathToTotalOffchainAssetAtLastClose(
+        string memory path
+    ) internal {
+        _params.pathToTotalOffchainAssetAtLastClose = path;
+        emit SetPathToTotalOffchainAssetAtLastClose(path);
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 14:51:27 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/BaseVault.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> BaseVault.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>14/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>16/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>15/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>30/30</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-yes">105×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">53×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
+import "./interfaces/Action.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+&nbsp;
+contract BaseVault is Ownable {
+    uint256 _transactionFee;
+    uint256 _firstDeposit;
+    uint256 _minDeposit;
+    uint256 _maxDeposit;
+    uint256 _maxWithdraw;
+    uint256 _targetReservesLevel;
+    uint256 _onchainServiceFeeRate;
+    uint256 _offchainServiceFeeRate;
+&nbsp;
+    // event SetTransactionFeeWeekdayRate(uint256 transactionFeeWeekdayRate);
+    // event SetTransactionFeeWeekendRate(uint256 transactionFeeWeekendRate);
+&nbsp;
+    event SetTransactionFee(uint256 transactionFee);
+    event SetFirsetDeposit(uint256 firstDeposit);
+    event SetMinDeposit(uint256 minDeposit);
+    event SetMaxDeposit(uint256 maxDeposit);
+    event SetMaxWithdraw(uint256 maxWithdraw);
+    event SetTargetReservesLevel(uint256 targetReservesLevel);
+    event SetOnchainServiceFeeRate(uint256 onchainServiceFeeRate);
+    event SetOffchainServiceFeeRate(uint256 offchainServiceFeeRate);
+    event SetFirstDeposit(uint256 firstDeposit);
+&nbsp;
+    constructor(
+        uint256 transactionFee,
+        uint256 firstDeposit,
+        uint256 minDeposit,
+        uint256 maxDeposit,
+        uint256 maxWithdraw,
+        uint256 targetReservesLevel,
+        uint256 onchainServiceFeeRate,
+        uint256 offchainServiceFeeRate
+    ) {
+        // _params.transactionFeeWeekdayRate = params.transactionFeeWeekdayRate;
+        // _params.transactionFeeWeekendRate = params.transactionFeeWeekendRate;
+        _transactionFee = transactionFee;
+        _firstDeposit = firstDeposit;
+        _minDeposit = minDeposit;
+        _maxDeposit = maxDeposit;
+        _maxWithdraw = maxWithdraw;
+        _targetReservesLevel = targetReservesLevel;
+        _onchainServiceFeeRate = onchainServiceFeeRate;
+        _offchainServiceFeeRate = offchainServiceFeeRate;
+    }
+&nbsp;
+    // function setTransactionFeeWeekdayRate(uint256 transactionFeeWeekdayRate) onlyAdminOrOperator whenPaused external {
+    //     _params.transactionFeeWeekdayRate =  transactionFeeWeekdayRate;
+    //     emit SetTransactionFeeWeekdayRate(transactionFeeWeekdayRate);
+    // }
+&nbsp;
+    // function setTransactionFeeWeekendRate(uint256 transactionFeeWeekendRate) onlyAdminOrOperator whenPaused external {
+    //     _params.transactionFeeWeekendRate =  transactionFeeWeekendRate;
+    //     emit SetTransactionFeeWeekendRate(transactionFeeWeekendRate);
+    // }
+&nbsp;
+    function setTransactionFee(uint256 transactionFee) external onlyOwner {
+        _transactionFee = transactionFee;
+        emit SetTransactionFee(transactionFee);
+    }
+&nbsp;
+    function setFirstDeposit(uint256 firstDeposit) external onlyOwner {
+        _firstDeposit = firstDeposit;
+        emit SetFirstDeposit(firstDeposit);
+    }
+&nbsp;
+    function setMinDeposit(uint256 minDeposit) external onlyOwner {
+        _minDeposit = minDeposit;
+        emit SetMinDeposit(minDeposit);
+    }
+&nbsp;
+    function setMaxDeposit(uint256 maxDeposit) external onlyOwner {
+        _maxDeposit = maxDeposit;
+        emit SetMaxDeposit(maxDeposit);
+    }
+&nbsp;
+    function setMaxWithdraw(uint256 maxWithdraw) external onlyOwner {
+        _maxWithdraw = maxWithdraw;
+        emit SetMaxWithdraw(maxWithdraw);
+    }
+&nbsp;
+    function setTargetReservesLevel(
+        uint256 targetReservesLevel
+    ) external onlyOwner {
+        _targetReservesLevel = targetReservesLevel;
+        emit SetTargetReservesLevel(targetReservesLevel);
+    }
+&nbsp;
+    function setOnchainServiceFeeRate(
+        uint256 onchainServiceFeeRate
+    ) external onlyOwner {
+        _onchainServiceFeeRate = onchainServiceFeeRate;
+        emit SetOnchainServiceFeeRate(onchainServiceFeeRate);
+    }
+&nbsp;
+    function setOffchainServiceFeeRate(
+        uint256 offchainServiceFeeRate
+    ) external onlyOwner {
+        _offchainServiceFeeRate = offchainServiceFeeRate;
+        emit SetOffchainServiceFeeRate(offchainServiceFeeRate);
+    }
+&nbsp;
+    function getTransactionFee() external view returns (uint256 txFee) {
+        return _transactionFee;
+    }
+&nbsp;
+    function getMinMaxDeposit()
+        external
+        view
+        returns (uint256 minDeposit, uint256 maxDeposit)
+    {
+        return (_minDeposit, _maxDeposit);
+    }
+&nbsp;
+    function getMaxWithdraw() external view returns (uint256 maxWithdraw) {
+        return _maxWithdraw;
+    }
+&nbsp;
+    function getTargetReservesLevel()
+        external
+        view
+        returns (uint256 targetReservesLevel)
+    {
+        return _targetReservesLevel;
+    }
+&nbsp;
+    function getOnchainAndOffChainServiceFeeRate()
+        external
+        view
+        returns (uint256 onchainFeeRate, uint256 offchainFeeRate)
+    {
+        return (_onchainServiceFeeRate, _offchainServiceFeeRate);
+    }
+&nbsp;
+    function getFirstDeposit() external view returns (uint256 firstDeposit) {
+        return _firstDeposit;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 14:51:27 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

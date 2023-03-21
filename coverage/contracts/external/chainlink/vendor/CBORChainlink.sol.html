@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/external/chainlink/vendor/CBORChainlink.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">contracts/external/chainlink/vendor/</a> CBORChainlink.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>15/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">56.25% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>9/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">27.27% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">33.33% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>10/30</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">354×</span>
+<span class="cline-any cline-yes">228×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">67×</span>
+<span class="cline-any cline-yes">67×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity &gt;=0.4.19;
+&nbsp;
+import {BufferChainlink} from "./BufferChainlink.sol";
+&nbsp;
+library CBORChainlink {
+  using BufferChainlink for BufferChainlink.buffer;
+&nbsp;
+  uint8 private constant MAJOR_TYPE_INT = 0;
+  uint8 private constant MAJOR_TYPE_NEGATIVE_INT = 1;
+  uint8 private constant MAJOR_TYPE_BYTES = 2;
+  uint8 private constant MAJOR_TYPE_STRING = 3;
+  uint8 private constant MAJOR_TYPE_ARRAY = 4;
+  uint8 private constant MAJOR_TYPE_MAP = 5;
+  uint8 private constant MAJOR_TYPE_TAG = 6;
+  uint8 private constant MAJOR_TYPE_CONTENT_FREE = 7;
+&nbsp;
+  uint8 private constant TAG_TYPE_BIGNUM = 2;
+  uint8 private constant TAG_TYPE_NEGATIVE_BIGNUM = 3;
+&nbsp;
+  function encodeFixedNumeric(BufferChainlink.buffer memory buf, uint8 major, uint64 value) private pure {
+    if(value &lt;= 23) {
+      buf.appendUint8(uint8((major &lt;&lt; 5) | value));
+    } else if (value &lt;= 0xFF) {
+      buf.appendUint8(uint8((major &lt;&lt; 5) | 24));
+      buf.appendInt(value, 1);
+    } else <span class="missing-if-branch" title="if path not taken" >I</span>if (value &lt;= 0xFFFF) {
+<span class="cstat-no" title="statement not covered" >      buf.appendUint8(uint8((major &lt;&lt; 5) | 25))</span>;
+<span class="cstat-no" title="statement not covered" >      buf.appendInt(value, 2)</span>;
+    } else <span class="missing-if-branch" title="else path not taken" >E</span>if (value &lt;= 0xFFFFFFFF) {
+      buf.appendUint8(uint8((major &lt;&lt; 5) | 26));
+      buf.appendInt(value, 4);
+    } else {
+<span class="cstat-no" title="statement not covered" >      buf.appendUint8(uint8((major &lt;&lt; 5) | 27))</span>;
+<span class="cstat-no" title="statement not covered" >      buf.appendInt(value, 8)</span>;
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function encodeIndefiniteLengthType(BufferChainlink.buffer memory buf, uint8 major) private pure {</span>
+<span class="cstat-no" title="statement not covered" >    buf.appendUint8(uint8((major &lt;&lt; 5) | 31))</span>;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function encodeUInt(BufferChainlink.buffer memory buf, uint value) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    if(value &gt; 0xFFFFFFFFFFFFFFFF) {</span>
+<span class="cstat-no" title="statement not covered" >      encodeBigNum(buf, value)</span>;
+    } else {
+<span class="cstat-no" title="statement not covered" >      encodeFixedNumeric(buf, MAJOR_TYPE_INT, uint64(value))</span>;
+    }
+  }
+&nbsp;
+  function encodeInt(BufferChainlink.buffer memory buf, int value) internal pure {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(value &lt; -0x10000000000000000) {
+<span class="cstat-no" title="statement not covered" >      encodeSignedBigNum(buf, value)</span>;
+    } else <span class="missing-if-branch" title="if path not taken" >I</span>if(value &gt; 0xFFFFFFFFFFFFFFFF) {
+<span class="cstat-no" title="statement not covered" >      encodeBigNum(buf, uint(value))</span>;
+    } else <span class="missing-if-branch" title="else path not taken" >E</span>if(value &gt;= 0) {
+      encodeFixedNumeric(buf, MAJOR_TYPE_INT, uint64(uint256(value)));
+    } else {
+<span class="cstat-no" title="statement not covered" >      encodeFixedNumeric(buf, MAJOR_TYPE_NEGATIVE_INT, uint64(uint256(-1 - value)))</span>;
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function encodeBytes(BufferChainlink.buffer memory buf, bytes memory value) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    encodeFixedNumeric(buf, MAJOR_TYPE_BYTES, uint64(value.length))</span>;
+<span class="cstat-no" title="statement not covered" >    buf.append(value)</span>;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function encodeBigNum(BufferChainlink.buffer memory buf, uint value) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    buf.appendUint8(uint8((MAJOR_TYPE_TAG &lt;&lt; 5) | TAG_TYPE_BIGNUM))</span>;
+<span class="cstat-no" title="statement not covered" >    encodeBytes(buf, abi.encode(value))</span>;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function encodeSignedBigNum(BufferChainlink.buffer memory buf, int input) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    buf.appendUint8(uint8((MAJOR_TYPE_TAG &lt;&lt; 5) | TAG_TYPE_NEGATIVE_BIGNUM))</span>;
+<span class="cstat-no" title="statement not covered" >    encodeBytes(buf, abi.encode(uint256(-1 - input)))</span>;
+  }
+&nbsp;
+  function encodeString(BufferChainlink.buffer memory buf, string memory value) internal pure {
+    encodeFixedNumeric(buf, MAJOR_TYPE_STRING, uint64(bytes(value).length));
+    buf.append(bytes(value));
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function startArray(BufferChainlink.buffer memory buf) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    encodeIndefiniteLengthType(buf, MAJOR_TYPE_ARRAY)</span>;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function startMap(BufferChainlink.buffer memory buf) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    encodeIndefiniteLengthType(buf, MAJOR_TYPE_MAP)</span>;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function endSequence(BufferChainlink.buffer memory buf) internal pure {</span>
+<span class="cstat-no" title="statement not covered" >    encodeIndefiniteLengthType(buf, MAJOR_TYPE_CONTENT_FREE)</span>;
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 14:51:27 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

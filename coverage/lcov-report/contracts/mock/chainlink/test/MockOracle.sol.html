@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/mock/chainlink/test/MockOracle.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">contracts/mock/chainlink/test/</a> MockOracle.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">73.33% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>11/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">38.89% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>7/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">76.19% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>16/21</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">99×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.6;
+&nbsp;
+import "@chainlink/contracts/src/v0.6/LinkTokenReceiver.sol";
+import "@chainlink/contracts/src/v0.6/interfaces/ChainlinkRequestInterface.sol";
+import "@chainlink/contracts/src/v0.6/interfaces/LinkTokenInterface.sol";
+import "@chainlink/contracts/src/v0.6/vendor/SafeMathChainlink.sol";
+&nbsp;
+/**
+ * @title The Chainlink Mock Oracle contract
+ * @notice Chainlink smart contract developers can use this to test their contracts
+ */
+contract MockOracle is ChainlinkRequestInterface, LinkTokenReceiver {
+    using SafeMathChainlink for uint256;
+&nbsp;
+    uint256 public constant EXPIRY_TIME = 5 minutes;
+    uint256 private constant MINIMUM_CONSUMER_GAS_LIMIT = 400000;
+&nbsp;
+    struct Request {
+        address callbackAddr;
+        bytes4 callbackFunctionId;
+    }
+&nbsp;
+    LinkTokenInterface internal LinkToken;
+    mapping(bytes32 =&gt; Request) private commitments;
+&nbsp;
+    event OracleRequest(
+        bytes32 indexed specId,
+        address requester,
+        bytes32 requestId,
+        uint256 payment,
+        address callbackAddr,
+        bytes4 callbackFunctionId,
+        uint256 cancelExpiration,
+        uint256 dataVersion,
+        bytes data
+    );
+&nbsp;
+    event CancelOracleRequest(bytes32 indexed requestId);
+&nbsp;
+    /**
+     * @notice Deploy with the address of the LINK token
+     * @dev Sets the LinkToken address for the imported LinkTokenInterface
+     * @param _link The address of the LINK token
+     */
+    constructor(address _link) public {
+        LinkToken = LinkTokenInterface(_link); // external but already deployed and unalterable
+    }
+&nbsp;
+    /**
+     * @notice Creates the Chainlink request
+     * @dev Stores the hash of the params as the on-chain commitment for the request.
+     * Emits OracleRequest event for the Chainlink node to detect.
+     * @param _sender The sender of the request
+     * @param _payment The amount of payment given (specified in wei)
+     * @param _specId The Job Specification ID
+     * @param _callbackAddress The callback address for the response
+     * @param _callbackFunctionId The callback function ID for the response
+     * @param _nonce The nonce sent by the requester
+     * @param _dataVersion The specified data version
+     * @param _data The CBOR payload of the request
+     */
+    function oracleRequest(
+        address _sender,
+        uint256 _payment,
+        bytes32 _specId,
+        address _callbackAddress,
+        bytes4 _callbackFunctionId,
+        uint256 _nonce,
+        uint256 _dataVersion,
+        bytes calldata _data
+    ) external override <span class="missing-if-branch" title="else path not taken" >E</span>onlyLINK <span class="missing-if-branch" title="else path not taken" >E</span>checkCallbackAddress(_callbackAddress) {
+        bytes32 requestId = keccak256(abi.encodePacked(_sender, _nonce));
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            commitments[requestId].callbackAddr == address(0),
+            "Must use a unique ID"
+        );
+        // solhint-disable-next-line not-rely-on-time
+        uint256 expiration = now.add(EXPIRY_TIME);
+&nbsp;
+        commitments[requestId] = Request(_callbackAddress, _callbackFunctionId);
+&nbsp;
+        emit OracleRequest(
+            _specId,
+            _sender,
+            requestId,
+            _payment,
+            _callbackAddress,
+            _callbackFunctionId,
+            expiration,
+            _dataVersion,
+            _data
+        );
+    }
+&nbsp;
+    /**
+     * @notice Called by the Chainlink node to fulfill requests
+     * @dev Given params must hash back to the commitment stored from `oracleRequest`.
+     * Will call the callback address' callback function without bubbling up error
+     * checking in a `require` so that the node can get paid.
+     * @param _requestId The fulfillment request ID that must match the requester's
+     * @param _data The data to return to the consuming contract
+     * @return Status if the external call was successful
+     */
+    function fulfillOracleRequest(
+        bytes32 _requestId,
+        bytes32 _data
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>isValidRequest(_requestId) returns (bool) {
+        Request memory req = commitments[_requestId];
+        delete commitments[_requestId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            gasleft() &gt;= MINIMUM_CONSUMER_GAS_LIMIT,
+            "Must provide consumer enough gas"
+        );
+        // All updates to the oracle's fulfillment should come before calling the
+        // callback(addr+functionId) as it is untrusted.
+        // See: https://solidity.readthedocs.io/en/develop/security-considerations.html#use-the-checks-effects-interactions-pattern
+        (bool success, ) = req.callbackAddr.call(
+            abi.encodeWithSelector(req.callbackFunctionId, _requestId, _data)
+        ); // solhint-disable-line avoid-low-level-calls
+        return success;
+    }
+&nbsp;
+    /**
+     * @notice Allows requesters to cancel requests sent to this oracle contract. Will transfer the LINK
+     * sent for the request back to the requester's address.
+     * @dev Given params must hash to a commitment stored on the contract in order for the request to be valid
+     * Emits CancelOracleRequest event.
+     * @param _requestId The request ID
+     * @param _payment The amount of payment given (specified in wei)
+     * @param _expiration The time of the expiration for the request
+     */
+<span class="fstat-no" title="function not covered" >    function cancelOracleRequest(</span>
+        bytes32 _requestId,
+        uint256 _payment,
+        bytes4,
+        uint256 _expiration
+    ) external override {
+<span class="cstat-no" title="statement not covered" >        require(</span>
+            commitments[_requestId].callbackAddr != address(0),
+            "Must use a unique ID"
+        );
+        // solhint-disable-next-line not-rely-on-time
+<span class="cstat-no" title="statement not covered" >        require(_expiration &lt;= now, "Request is not expired")</span>;
+&nbsp;
+        delete commitments[_requestId];
+<span class="cstat-no" title="statement not covered" >        emit CancelOracleRequest(_requestId);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        assert(LinkToken.transfer(msg.sender, _payment))</span>;
+    }
+&nbsp;
+    /**
+     * @notice Returns the address of the LINK token
+     * @dev This is the public implementation for chainlinkTokenAddress, which is
+     * an internal method of the ChainlinkClient contract
+     */
+    function getChainlinkToken() public view override returns (address) {
+        return address(LinkToken);
+    }
+&nbsp;
+    // MODIFIERS
+&nbsp;
+    /**
+     * @dev Reverts if request ID does not exist
+     * @param _requestId The given request ID to check in stored `commitments`
+     */
+    modifier isValidRequest(bytes32 _requestId) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            commitments[_requestId].callbackAddr != address(0),
+            "Must have a valid requestId"
+        );
+        _;
+    }
+&nbsp;
+    /**
+     * @dev Reverts if the callback address is the LINK token
+     * @param _to The callback address
+     */
+    modifier checkCallbackAddress(address _to) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_to != address(LinkToken), "Cannot callback to LINK");
+        _;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 14:51:27 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/external/chainlink/vendor/BufferChainlink.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">contracts/external/chainlink/vendor/</a> BufferChainlink.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45.95% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>17/37</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">35.71% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>5/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">43.75% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>27/54</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-yes">67×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">67×</span>
+<span class="cline-any cline-yes">67×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">354×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">354×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">354×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">354×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">126×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">126×</span>
+<span class="cline-any cline-yes">126×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">126×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">126×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+&nbsp;
+/**
+ * @dev A library for working with mutable byte buffers in Solidity.
+ *
+ * Byte buffers are mutable and expandable, and provide a variety of primitives
+ * for writing to them. At any time you can fetch a bytes object containing the
+ * current contents of the buffer. The bytes object should not be stored between
+ * operations, as it may change due to resizing of the buffer.
+ */
+library BufferChainlink {
+  /**
+   * @dev Represents a mutable buffer. Buffers have a current value (buf) and
+   *      a capacity. The capacity may be longer than the current value, in
+   *      which case it can be extended without the need to allocate more memory.
+   */
+  struct buffer {
+    bytes buf;
+    uint256 capacity;
+  }
+&nbsp;
+  /**
+   * @dev Initializes a buffer with an initial capacity.
+   * @param buf The buffer to initialize.
+   * @param capacity The number of bytes of space to allocate the buffer.
+   * @return The buffer, for chaining.
+   */
+  function init(buffer memory buf, uint256 capacity) internal pure returns (buffer memory) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (capacity % 32 != 0) {
+      capacity += 32 - (capacity % 32);
+    }
+    // Allocate space for the buffer data
+    buf.capacity = capacity;
+    assembly {
+      let ptr := mload(0x40)
+      mstore(buf, ptr)
+      mstore(ptr, 0)
+      mstore(0x40, add(32, add(ptr, capacity)))
+    }
+    return buf;
+  }
+&nbsp;
+  /**
+   * @dev Initializes a new buffer from an existing bytes object.
+   *      Changes to the buffer may mutate the original value.
+   * @param b The bytes object to initialize the buffer with.
+   * @return A new buffer.
+   */
+<span class="fstat-no" title="function not covered" >  function fromBytes(bytes memory b) internal pure returns (buffer memory) {</span>
+<span class="cstat-no" title="statement not covered" >    buffer memory buf;</span>
+    buf.buf = b;
+    buf.capacity = b.length;
+<span class="cstat-no" title="statement not covered" >    return buf;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function resize(buffer memory buf, uint256 capacity) private pure {</span>
+<span class="cstat-no" title="statement not covered" >    bytes memory oldbuf = buf.buf;</span>
+<span class="cstat-no" title="statement not covered" >    init(buf, capacity)</span>;
+<span class="cstat-no" title="statement not covered" >    append(buf, oldbuf)</span>;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function max(uint256 a, uint256 b) private pure returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >    if (a &gt; b) {</span>
+<span class="cstat-no" title="statement not covered" >      return a;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return b;</span>
+  }
+&nbsp;
+  /**
+   * @dev Sets buffer length to 0.
+   * @param buf The buffer to truncate.
+   * @return The original buffer, for chaining..
+   */
+<span class="fstat-no" title="function not covered" >  function truncate(buffer memory buf) internal pure returns (buffer memory) {</span>
+    assembly {
+      let bufptr := mload(buf)
+      mstore(bufptr, 0)
+    }
+<span class="cstat-no" title="statement not covered" >    return buf;</span>
+  }
+&nbsp;
+  /**
+   * @dev Writes a byte string to a buffer. Resizes if doing so would exceed
+   *      the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param off The start offset to write to.
+   * @param data The data to append.
+   * @param len The number of bytes to copy.
+   * @return The original buffer, for chaining.
+   */
+  function write(
+    buffer memory buf,
+    uint256 off,
+    bytes memory data,
+    uint256 len
+  ) internal pure returns (buffer memory) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>require(len &lt;= data.length);
+&nbsp;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (off + len &gt; buf.capacity) {
+<span class="cstat-no" title="statement not covered" >      resize(buf, max(buf.capacity, len + off) * 2)</span>;
+    }
+&nbsp;
+    uint256 dest;
+    uint256 src;
+    assembly {
+      // Memory address of the buffer data
+      let bufptr := mload(buf)
+      // Length of existing buffer data
+      let buflen := mload(bufptr)
+      // Start address = buffer address + offset + sizeof(buffer length)
+      dest := add(add(bufptr, 32), off)
+      // Update buffer length if we're extending it
+      if gt(add(len, off), buflen) {
+        mstore(bufptr, add(len, off))
+      }
+      src := add(data, 32)
+    }
+&nbsp;
+    // Copy word-length chunks while possible
+    for (; len &gt;= 32; len -= 32) {
+      assembly {
+        mstore(dest, mload(src))
+      }
+      dest += 32;
+      src += 32;
+    }
+&nbsp;
+    // Copy remaining bytes
+    unchecked {
+      uint256 mask = (256**(32 - len)) - 1;
+      assembly {
+        let srcpart := and(mload(src), not(mask))
+        let destpart := and(mload(dest), mask)
+        mstore(dest, or(destpart, srcpart))
+      }
+    }
+&nbsp;
+    return buf;
+  }
+&nbsp;
+  /**
+   * @dev Appends a byte string to a buffer. Resizes if doing so would exceed
+   *      the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param data The data to append.
+   * @param len The number of bytes to copy.
+   * @return The original buffer, for chaining.
+   */
+<span class="fstat-no" title="function not covered" >  function append(</span>
+    buffer memory buf,
+    bytes memory data,
+    uint256 len
+  ) internal pure returns (buffer memory) {
+<span class="cstat-no" title="statement not covered" >    return write(buf, buf.buf.length, data, len);</span>
+  }
+&nbsp;
+  /**
+   * @dev Appends a byte string to a buffer. Resizes if doing so would exceed
+   *      the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param data The data to append.
+   * @return The original buffer, for chaining.
+   */
+  function append(buffer memory buf, bytes memory data) internal pure returns (buffer memory) {
+    return write(buf, buf.buf.length, data, data.length);
+  }
+&nbsp;
+  /**
+   * @dev Writes a byte to the buffer. Resizes if doing so would exceed the
+   *      capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param off The offset to write the byte at.
+   * @param data The data to append.
+   * @return The original buffer, for chaining.
+   */
+  function writeUint8(
+    buffer memory buf,
+    uint256 off,
+    uint8 data
+  ) internal pure returns (buffer memory) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (off &gt;= buf.capacity) {
+<span class="cstat-no" title="statement not covered" >      resize(buf, buf.capacity * 2)</span>;
+    }
+&nbsp;
+    assembly {
+      // Memory address of the buffer data
+      let bufptr := mload(buf)
+      // Length of existing buffer data
+      let buflen := mload(bufptr)
+      // Address = buffer address + sizeof(buffer length) + off
+      let dest := add(add(bufptr, off), 32)
+      mstore8(dest, data)
+      // Update buffer length if we extended it
+      if eq(off, buflen) {
+        mstore(bufptr, add(buflen, 1))
+      }
+    }
+    return buf;
+  }
+&nbsp;
+  /**
+   * @dev Appends a byte to the buffer. Resizes if doing so would exceed the
+   *      capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param data The data to append.
+   * @return The original buffer, for chaining.
+   */
+  function appendUint8(buffer memory buf, uint8 data) internal pure returns (buffer memory) {
+    return writeUint8(buf, buf.buf.length, data);
+  }
+&nbsp;
+  /**
+   * @dev Writes up to 32 bytes to the buffer. Resizes if doing so would
+   *      exceed the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param off The offset to write at.
+   * @param data The data to append.
+   * @param len The number of bytes to write (left-aligned).
+   * @return The original buffer, for chaining.
+   */
+<span class="fstat-no" title="function not covered" >  function write(</span>
+    buffer memory buf,
+    uint256 off,
+    bytes32 data,
+    uint256 len
+  ) private pure returns (buffer memory) {
+<span class="cstat-no" title="statement not covered" >    if (len + off &gt; buf.capacity) {</span>
+<span class="cstat-no" title="statement not covered" >      resize(buf, (len + off) * 2)</span>;
+    }
+&nbsp;
+    unchecked {
+<span class="cstat-no" title="statement not covered" >      uint256 mask = (256**len) - 1;</span>
+      // Right-align data
+      data = data &gt;&gt; (8 * (32 - len));
+      assembly {
+        // Memory address of the buffer data
+        let bufptr := mload(buf)
+        // Address = buffer address + sizeof(buffer length) + off + len
+        let dest := add(add(bufptr, off), len)
+        mstore(dest, or(and(mload(dest), not(mask)), data))
+        // Update buffer length if we extended it
+        if gt(add(off, len), mload(bufptr)) {
+          mstore(bufptr, add(off, len))
+        }
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    return buf;</span>
+  }
+&nbsp;
+  /**
+   * @dev Writes a bytes20 to the buffer. Resizes if doing so would exceed the
+   *      capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param off The offset to write at.
+   * @param data The data to append.
+   * @return The original buffer, for chaining.
+   */
+<span class="fstat-no" title="function not covered" >  function writeBytes20(</span>
+    buffer memory buf,
+    uint256 off,
+    bytes20 data
+  ) internal pure returns (buffer memory) {
+<span class="cstat-no" title="statement not covered" >    return write(buf, off, bytes32(data), 20);</span>
+  }
+&nbsp;
+  /**
+   * @dev Appends a bytes20 to the buffer. Resizes if doing so would exceed
+   *      the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param data The data to append.
+   * @return The original buffer, for chhaining.
+   */
+<span class="fstat-no" title="function not covered" >  function appendBytes20(buffer memory buf, bytes20 data) internal pure returns (buffer memory) {</span>
+<span class="cstat-no" title="statement not covered" >    return write(buf, buf.buf.length, bytes32(data), 20);</span>
+  }
+&nbsp;
+  /**
+   * @dev Appends a bytes32 to the buffer. Resizes if doing so would exceed
+   *      the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param data The data to append.
+   * @return The original buffer, for chaining.
+   */
+<span class="fstat-no" title="function not covered" >  function appendBytes32(buffer memory buf, bytes32 data) internal pure returns (buffer memory) {</span>
+<span class="cstat-no" title="statement not covered" >    return write(buf, buf.buf.length, data, 32);</span>
+  }
+&nbsp;
+  /**
+   * @dev Writes an integer to the buffer. Resizes if doing so would exceed
+   *      the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param off The offset to write at.
+   * @param data The data to append.
+   * @param len The number of bytes to write (right-aligned).
+   * @return The original buffer, for chaining.
+   */
+  function writeInt(
+    buffer memory buf,
+    uint256 off,
+    uint256 data,
+    uint256 len
+  ) private pure returns (buffer memory) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (len + off &gt; buf.capacity) {
+<span class="cstat-no" title="statement not covered" >      resize(buf, (len + off) * 2)</span>;
+    }
+&nbsp;
+    uint256 mask = (256**len) - 1;
+    assembly {
+      // Memory address of the buffer data
+      let bufptr := mload(buf)
+      // Address = buffer address + off + sizeof(buffer length) + len
+      let dest := add(add(bufptr, off), len)
+      mstore(dest, or(and(mload(dest), not(mask)), data))
+      // Update buffer length if we extended it
+      if gt(add(off, len), mload(bufptr)) {
+        mstore(bufptr, add(off, len))
+      }
+    }
+    return buf;
+  }
+&nbsp;
+  /**
+   * @dev Appends a byte to the end of the buffer. Resizes if doing so would
+   * exceed the capacity of the buffer.
+   * @param buf The buffer to append to.
+   * @param data The data to append.
+   * @return The original buffer.
+   */
+  function appendInt(
+    buffer memory buf,
+    uint256 data,
+    uint256 len
+  ) internal pure returns (buffer memory) {
+    return writeInt(buf, buf.buf.length, data, len);
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 14:51:27 GMT+0700 (Indochina Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
