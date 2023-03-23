@@ -36,7 +36,8 @@ interface IOpenEdenVault {
         address investor,
         uint256 assets,
         uint256 shares,
-        bytes32 requestId
+        bytes32 requestId,
+        bytes32 prevId
     );
     event FundTBillPurchase(address treasury, uint256 assets);
     event ProcessWithdraw(

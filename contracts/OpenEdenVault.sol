@@ -111,7 +111,7 @@ contract OpenEdenVault is
         emit UpdateTreasury(newAddress);
     }
 
-        // update baseVault address
+    // update baseVault address
     function setBaseVault(address baseVault) external onlyAdmin {
         _baseVault = IBaseVault(baseVault);
         emit SetBaseVault(baseVault);
@@ -241,7 +241,7 @@ contract OpenEdenVault is
     function fundTBillPurchase(
         address underlying,
         uint256 assets
-    ) external onlyAdmin {
+    ) external onlyAdminOrOperator {
         require(_treasury != address(0), "invalid treasury");
         require(assets <= totalAssets(), "insufficient amount");
         SafeERC20Upgradeable.safeTransfer(
@@ -484,7 +484,7 @@ contract OpenEdenVault is
         uint256 shares,
         bytes32 requestId
     ) internal {
-        bytes memory data = abi.encode(investor, shares);
+        bytes memory data = abi.encode(investor, shares, requestId);
         _withdrawalQueue.pushBack(data);
         _transfer(investor, address(this), shares);
         emit UpdateQueueWithdrawal(investor, shares, requestId);
@@ -493,9 +493,9 @@ contract OpenEdenVault is
     function _processWithdrawalQueue(bytes32 requestId) internal {
         for (; !_withdrawalQueue.empty(); ) {
             bytes memory data = _withdrawalQueue.front();
-            (address investor, uint256 shares) = abi.decode(
+            (address investor, uint256 shares, bytes32 prevId) = abi.decode(
                 data,
-                (address, uint256)
+                (address, uint256, bytes32)
             );
 
             uint256 assets = previewRedeem(shares);
@@ -514,7 +514,13 @@ contract OpenEdenVault is
                 shares
             );
 
-            emit ProcessWithdrawalQueue(investor, assets, shares, requestId);
+            emit ProcessWithdrawalQueue(
+                investor,
+                assets,
+                shares,
+                requestId,
+                prevId
+            );
         }
     }
 
@@ -537,7 +543,7 @@ contract OpenEdenVault is
         return (assets * rate) / (365 * BPSUNIT);
     }
 
-    function claimOnchainServiceFee(uint256 amount) public onlyAdmin {
+    function claimOnchainServiceFee(uint256 amount) public onlyAdminOrOperator {
         require(_oplServiceProvider != address(0), "invalid opl address");
 
         _onchainFee -= amount;
@@ -549,7 +555,9 @@ contract OpenEdenVault is
         emit ClaimOnchainServiceFee(msg.sender, _oplServiceProvider, amount);
     }
 
-    function claimOffchainServiceFee(uint256 amount) public onlyAdmin {
+    function claimOffchainServiceFee(
+        uint256 amount
+    ) public onlyAdminOrOperator {
         require(_oplServiceProvider != address(0), "invalid opl address");
 
         _offchainFee -= amount;
@@ -660,37 +668,33 @@ contract OpenEdenVault is
 
     function setChainlinkOracleAddress(
         address newAddress
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setChainlinkOracleAddress(newAddress);
     }
 
-    function setChainlinkFee(
-        uint256 fee
-    ) external override onlyAdminOrOperator {
+    function setChainlinkFee(uint256 fee) external override onlyAdmin {
         super._setChainlinkFee(fee);
     }
 
-    function setChainlinkJobId(
-        bytes32 jobId
-    ) external override onlyAdminOrOperator {
+    function setChainlinkJobId(bytes32 jobId) external override onlyAdmin {
         super._setChainlinkJobId(jobId);
     }
 
     function setChainlinkURLData(
         string memory url
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setChainlinkURLData(url);
     }
 
     function setPathToOffchainAssets(
         string memory path
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setPathToOffchainAssets(path);
     }
 
     function setPathToTotalOffchainAssetAtLastClose(
         string memory path
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setPathToTotalOffchainAssetAtLastClose(path);
     }
 }
