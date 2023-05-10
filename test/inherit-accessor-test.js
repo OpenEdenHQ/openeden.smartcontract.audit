@@ -10,7 +10,7 @@ const { networkConfig, developmentChains } = require("../helper-hardhat-config")
 const { numToBytes32 } = require("../helper-functions")
 const { BigNumber } = require("ethers");
 const { describe } = require("mocha");
-const { createBigNumber18, createBigNumber6 } = require("../helpers/constants");
+const { createBigNumber18, createBigNumber6, ZERO_ADDRESS } = require("../helpers/constants");
 
 
 describe("Chainlink Oracle", function () {
@@ -127,11 +127,17 @@ describe("Chainlink Oracle", function () {
     await usdc.connect(usInvestor).approve(vault.address, initBalanceInvestor);
     await usdc.connect(investor5).approve(vault.address, initBalanceInvestor);
 
-    // 0: NON KYC, 1: GENERAL KYC 2: US KYC
-    await kycManager.grantKyc(investor1.address, 2); // GENERAL_KYC
-    await kycManager.grantKyc(investor2.address, 2);
-    await kycManager.grantKyc(investor3.address, 2);
-    await kycManager.grantKyc(usInvestor.address, 1); // US
+    // 0: NON KYC, 
+    // 1: US KYC
+    // 2: GENERAL KYC 
+    await kycManager.grantKycInBulk([
+      investor1.address,
+      investor2.address,
+      investor3.address,
+      usInvestor.address
+    ],
+      [2, 2, 2, 1]);
+
     // fund link
     await linkToken.transfer(vault.address, fundAmount);
   });
@@ -172,7 +178,9 @@ describe("Chainlink Oracle", function () {
     const requestId = transactionReceipt.events[0].topics[1]
     // current off-chain assets
     const callbackValue = BigNumber.from(totalOffChainAssets);
-    await mockOracle.fulfillOracleRequest(requestId, numToBytes32(callbackValue))
+    // await mockOracle.fulfillOracleRequest(requestId, numToBytes32(callbackValue))
+    await expect(mockOracle.fulfillOracleRequest(requestId, numToBytes32(callbackValue))).
+      to.emit(vault, "ProcessWithdrawalQueue")
   }
 
   describe('basic test by Minh', () => {
@@ -251,7 +259,7 @@ describe("Chainlink Oracle", function () {
       // us investor withdraw 50k
       await withdraw(usInvestor, _50k, _200k);// fulfill revert because, vault is non kyc account and us can't transfer to non kyc
       await expect(await vault.getWithdrawalQueueLength()).to.equal(0);
-      await kycManager.grantKyc(vault.address, 2); // kyc vault
+      await kycManager.grantKycInBulk([vault.address], [2]); // kyc vault
       await withdraw(usInvestor, _50k, _200k);
       await expect(await vault.getWithdrawalQueueLength()).to.equal(1);
     });
@@ -376,15 +384,15 @@ describe("Chainlink Oracle", function () {
     it("not a kyc user can transfer tbill to other account", async function () {
       const amountTbillTransfer = "10000000000"; // 10k
       await deposit(investor1, firstDepositAmount, "0");
-      await kycManager.revokeKyc(investor1.address);
+      await kycManager.revokeKycInBulk([investor1.address]);
       await expect(vault.connect(investor1).deposit(firstDepositAmount, investor1.address)).to.revertedWith("not a kyc user");
       await expect(vault.connect(investor5).deposit(firstDepositAmount, investor5.address)).to.revertedWith("not a kyc user");
       await vault.connect(investor1).transfer(investor2.address, amountTbillTransfer);
     });
 
-    it("revoke kyc than grantKyc", async function () {
-      await kycManager.revokeKyc(investor1.address);
-      await kycManager.grantKyc(investor1.address, 1);
+    it("revoke kyc than grantKycInBulk", async function () {
+      await kycManager.revokeKycInBulk([investor1.address]);
+      await kycManager.grantKycInBulk([investor1.address], [1]);
       await deposit(investor1, firstDepositAmount, "0");
     });
 
@@ -404,12 +412,12 @@ describe("Chainlink Oracle", function () {
     it("banded investor can't transfer or receive tbill", async function () {
       await deposit(investor1, firstDepositAmount, "0");
       await deposit(investor2, firstDepositAmount, "0");
-      await kycManager.banned(investor1.address);
+      await kycManager.bannedInBulk([investor1.address]);
       await expect(await kycManager.isBanned(investor1.address)).to.equal(true);
       const amountTbillTransfer = "10000000000"; // 10k
       await expect(vault.connect(investor1).transfer(investor2.address, amountTbillTransfer)).to.revertedWith("user is banned");
       await expect(vault.connect(investor2).transfer(investor1.address, amountTbillTransfer)).to.revertedWith("user is banned");
-      await kycManager.unBanned(investor1.address);
+      await kycManager.unBannedInBulk([investor1.address]);
       await expect(await kycManager.isBanned(investor1.address)).to.equal(false);
       await vault.connect(investor1).transfer(investor2.address, amountTbillTransfer);
       await vault.connect(investor2).transfer(investor1.address, amountTbillTransfer);
@@ -442,12 +450,16 @@ describe("Chainlink Oracle", function () {
     });
 
     it("kyc role setter", async function () {
-      await expect(kycManager.connect(investor1).grantKyc(investor5.address, 1)).to.revertedWith("Ownable: caller is not the owner");
-      await expect(kycManager.connect(investor1).revokeKyc(investor2.address)).to.revertedWith("Ownable: caller is not the owner");
-      await expect(kycManager.connect(investor1).banned(investor2.address)).to.revertedWith("Ownable: caller is not the owner");
-      await expect(kycManager.connect(investor2).unBanned(investor3.address)).to.revertedWith("Ownable: caller is not the owner");
+      await expect(kycManager.connect(investor1).grantKycInBulk([investor5.address], [1])).to.revertedWith("Ownable: caller is not the owner");
+      await expect(kycManager.connect(investor1).revokeKycInBulk([investor2.address])).to.revertedWith("Ownable: caller is not the owner");
+      await expect(kycManager.connect(investor1).bannedInBulk([investor2.address])).to.revertedWith("Ownable: caller is not the owner");
+      await expect(kycManager.connect(investor2).unBannedInBulk([investor3.address])).to.revertedWith("Ownable: caller is not the owner");
       await expect(kycManager.connect(investor2).setStrict(false)).to.revertedWith("Ownable: caller is not the owner");
-      await expect(kycManager.grantKyc(investor5.address, 0)).to.revertedWith("invalid kyc type");
+      await expect(kycManager.grantKycInBulk([investor5.address], [0])).to.revertedWith("invalid kyc type");
+      await expect(kycManager.grantKycInBulk([investor1.address, investor1.address], [1])).to.revertedWith("invalid input");
+      await expect(kycManager.grantKycInBulk([ZERO_ADDRESS], [1])).to.revertedWith("invalid address");
+      await expect(kycManager.revokeKycInBulk([ZERO_ADDRESS])).to.revertedWith("invalid address");
+      await expect(kycManager.bannedInBulk([ZERO_ADDRESS])).to.revertedWith("invalid address");
     });
     // ====== CHAINLINK SETTING ======
     const newAddress = "0x1111111111111111111111111111111111111111";
@@ -457,21 +469,21 @@ describe("Chainlink Oracle", function () {
     const newChainlinkPathToAsset = "pathFoAsset";
     const newChainlinkPathEpoch = "pathForEpochUpdate";
     it("chainlink role setter", async function () {
-      await expect(vault.connect(investor1).setChainlinkOracleAddress(newAddress)).to.revertedWith("permission denied");
-      await expect(vault.connect(investor1).setChainlinkFee(newChainlinkFee)).to.revertedWith("permission denied");
-      await expect(vault.connect(investor1).setChainlinkJobId(newChainkinkJobId)).to.revertedWith("permission denied");
-      await expect(vault.connect(investor1).setChainlinkURLData(newChainlinkUrl)).to.revertedWith("permission denied");
-      await expect(vault.connect(investor1).setPathToOffchainAssets(newChainlinkPathToAsset)).to.revertedWith("permission denied");
-      await expect(vault.connect(investor1).setPathToTotalOffchainAssetAtLastClose(newChainlinkPathEpoch)).to.revertedWith("permission denied");
+      await expect(vault.connect(investor1).setChainlinkOracleAddress(newAddress)).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).setChainlinkFee(newChainlinkFee)).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).setChainlinkJobId(newChainkinkJobId)).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).setChainlinkURLData(newChainlinkUrl)).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).setPathToOffchainAssets(newChainlinkPathToAsset)).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).setPathToTotalOffchainAssetAtLastClose(newChainlinkPathEpoch)).to.revertedWith(onlyOwnerMessage);
     });
 
     it("chainlink role setter for operator account", async function () {
-      await vault.connect(operator).setChainlinkOracleAddress(newAddress);
-      await vault.connect(operator).setChainlinkFee(newChainlinkFee);
-      await vault.connect(operator).setChainlinkJobId(newChainkinkJobId);
-      await vault.connect(operator).setChainlinkURLData(newChainlinkUrl);
-      await vault.connect(operator).setPathToOffchainAssets(newChainlinkPathToAsset);
-      await vault.connect(operator).setPathToTotalOffchainAssetAtLastClose(newChainlinkPathEpoch);
+      await vault.connect(owner).setChainlinkOracleAddress(newAddress);
+      await vault.connect(owner).setChainlinkFee(newChainlinkFee);
+      await vault.connect(owner).setChainlinkJobId(newChainkinkJobId);
+      await vault.connect(owner).setChainlinkURLData(newChainlinkUrl);
+      await vault.connect(owner).setPathToOffchainAssets(newChainlinkPathToAsset);
+      await vault.connect(owner).setPathToTotalOffchainAssetAtLastClose(newChainlinkPathEpoch);
 
       result = await vault.getChainLinkParameters();
       console.log(result);
@@ -514,8 +526,8 @@ describe("Chainlink Oracle", function () {
     ) {
       await expect(vault.connect(investor1).setTreasury(investor1.address)).to.revertedWith(onlyOwnerMessage);
       await expect(vault.connect(investor1).setOplServiceProvider(investor1.address)).to.revertedWith(onlyOwnerMessage);
-      await expect(vault.connect(investor1).claimOnchainServiceFee(await vault._onchainFee())).to.revertedWith(onlyOwnerMessage);
-      await expect(vault.connect(investor1).claimOffchainServiceFee(await vault._offchainFee())).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).claimOnchainServiceFee(await vault._onchainFee())).to.revertedWith("permission denied");
+      await expect(vault.connect(investor1).claimOffchainServiceFee(await vault._offchainFee())).to.revertedWith("permission denied");
     });
 
     it("only caller", async function () {
@@ -582,20 +594,19 @@ describe("Chainlink Oracle", function () {
       // fundTBillPurchase 200k
       await vault.fundTBillPurchase(usdc.address, _200k);
 
-
       await withdraw(investor1, _50k, offchainAmount);
       await withdraw(investor2, _70k, offchainAmount); // 20k in queue
       await withdraw(investor3, _30k, offchainAmount); // 30k in queue
       let queueLength = await vault.getWithdrawalQueueLength();
       await expect(queueLength).to.equal(2);
       await deposit(investor1, _30k, offchainAmount);  // deposit vault 30k
-      await processWithdrawalQueue(offchainAmount); // admin process Withdrawal Queue
+      await processWithdrawalQueue(offchainAmount)// admin process Withdrawal Queue
       // check queue length again, clear 1 item
       queueLength = await vault.getWithdrawalQueueLength();
-      await expect(queueLength).to.equal(1);
+      expect(queueLength).to.equal(1);
       result = await vault.getWithdrawalQueueInfo(0);
-      await expect(result.investor).to.equal(investor3.address);
-      await expect(result.shares).to.equal(_30k);
+      expect(result.investor).to.equal(investor3.address);
+      expect(result.shares).to.equal(_30k);
     });
 
     it("check treasury and opl account", async function () {
@@ -653,7 +664,7 @@ describe("Chainlink Oracle", function () {
 
     it("fundTBillPurchase abnormal case", async function () {
       const _10k = BigNumber.from("10000000000");
-      await expect(vault.connect(investor1).fundTBillPurchase(usdc.address, _10k)).to.revertedWith(onlyOwnerMessage);
+      await expect(vault.connect(investor1).fundTBillPurchase(usdc.address, _10k)).to.revertedWith("permission denied");
       await expect(vault.fundTBillPurchase(usdc.address, _10k)).to.revertedWith("insufficient amount");
       await vault.setTreasury("0x0000000000000000000000000000000000000000");
       await expect(vault.fundTBillPurchase(usdc.address, _10k)).to.revertedWith("invalid treasury");
@@ -674,7 +685,7 @@ describe("Chainlink Oracle", function () {
       await expect(vault.connect(investor1).processWithdrawalQueue()).to.revertedWith("permission denied");
     });
 
-    it("update new kycManager", async function () {  
+    it("update new kycManager", async function () {
       // deploy kycManager
       const NewKycManager = await ethers.getContractFactory("KycManager");
       newKycManager = await NewKycManager.deploy();
@@ -706,7 +717,7 @@ describe("Chainlink Oracle", function () {
         newOffchainFeeRate, // 40 bps
       );
       await newBaseVault.deployed();
-      
+
       await expect(await vault.txsFee(_100k)).to.equal(_50$);
       await expect(vault.connect(investor1).setBaseVault(newBaseVault.address)).to.revertedWith(onlyOwnerMessage);
       await vault.setBaseVault(newBaseVault.address);

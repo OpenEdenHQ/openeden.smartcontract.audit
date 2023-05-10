@@ -20,49 +20,49 @@ describe("KycManager", function () {
 
   describe("Kyc Operations", function () {
     it("Should grant KYC correctly", async function () {
-      await kycManager.connect(owner).grantKyc(addr1.address, KycType.US_KYC);
+      await kycManager.connect(owner).grantKycInBulk([addr1.address], [KycType.US_KYC]);
       const userInfo = await kycManager.getUserInfo(addr1.address);
       expect(userInfo.kycType).to.equal(KycType.US_KYC);
     });
 
     it("Should not allow non-owner to grant KYC", async function () {
-      await expect(kycManager.connect(addr1).grantKyc(addr2.address, KycType.US_KYC)).to.be.revertedWith("Ownable: caller is not the owner");
+      await expect(kycManager.connect(addr1).grantKycInBulk([addr2.address], [KycType.US_KYC])).to.be.revertedWith("Ownable: caller is not the owner");
     });
 
     it("Should revoke KYC correctly", async function () {
-      await kycManager.connect(owner).grantKyc(addr1.address, KycType.US_KYC);
-      await kycManager.connect(owner).revokeKyc(addr1.address);
+      await kycManager.connect(owner).grantKycInBulk([addr1.address], [KycType.US_KYC]);
+      await kycManager.connect(owner).revokeKycInBulk([addr1.address]);
       const userInfo = await kycManager.getUserInfo(addr1.address);
       expect(userInfo.kycType).to.equal(KycType.NON_KYC);
     });
 
     it("Should not allow non-owner to revoke KYC", async function () {
-      await kycManager.connect(owner).grantKyc(addr1.address, KycType.US_KYC);
-      await expect(kycManager.connect(addr1).revokeKyc(addr1.address)).to.be.revertedWith("Ownable: caller is not the owner");
+      await kycManager.connect(owner).grantKycInBulk([addr1.address], [KycType.US_KYC]);
+      await expect(kycManager.connect(addr1).revokeKycInBulk([addr1.address])).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });
 
   describe("Ban Operations", function () {
     it("Should ban user correctly", async function () {
-      await kycManager.connect(owner).banned(addr1.address);
+      await kycManager.connect(owner).bannedInBulk([addr1.address]);
       const userInfo = await kycManager.getUserInfo(addr1.address);
       expect(userInfo.isBanned).to.equal(true);
     });
 
     it("Should not allow non-owner to ban user", async function () {
-      await expect(kycManager.connect(addr1).banned(addr2.address)).to.be.revertedWith("Ownable: caller is not the owner");
+      await expect(kycManager.connect(addr1).bannedInBulk([addr2.address])).to.be.revertedWith("Ownable: caller is not the owner");
     });
 
     it("Should unban user correctly", async function () {
-      await kycManager.connect(owner).banned(addr1.address);
-      await kycManager.connect(owner).unBanned(addr1.address);
+      await kycManager.connect(owner).bannedInBulk([addr1.address]);
+      await kycManager.connect(owner).unBannedInBulk([addr1.address]);
       const userInfo = await kycManager.getUserInfo(addr1.address);
       expect(userInfo.isBanned).to.equal(false);
     });
 
     it("Should not allow non-owner to unban user", async function () {
-      await kycManager.connect(owner).banned(addr1.address);
-      await expect(kycManager.connect(addr1).unBanned(addr1.address)).to.be.revertedWith("Ownable: caller is not the owner");
+      await kycManager.connect(owner).bannedInBulk([addr1.address]);
+      await expect(kycManager.connect(addr1).unBannedInBulk([addr1.address])).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });
 

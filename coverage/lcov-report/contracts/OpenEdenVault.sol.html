@@ -739,7 +739,11 @@
 694
 695
 696
-697</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+697
+698
+699
+700
+701</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -786,17 +790,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-yes">33×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">24×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25×</span>
-<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">20×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1260,6 +1264,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7×</span>
@@ -1288,6 +1298,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1335,7 +1347,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">308×</span>
+<span class="cline-any cline-yes">299×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1406,11 +1418,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1548,7 +1556,7 @@ contract OpenEdenVault is
         emit UpdateTreasury(newAddress);
     }
 &nbsp;
-        // update baseVault address
+    // update baseVault address
     function setBaseVault(address baseVault) external onlyAdmin {
         _baseVault = IBaseVault(baseVault);
         emit SetBaseVault(baseVault);
@@ -1678,7 +1686,7 @@ contract OpenEdenVault is
     function fundTBillPurchase(
         address underlying,
         uint256 assets
-    ) external onlyAdmin {
+    ) external onlyAdminOrOperator {
         require(_treasury != address(0), "invalid treasury");
         require(assets &lt;= totalAssets(), "insufficient amount");
         SafeERC20Upgradeable.safeTransfer(
@@ -1921,7 +1929,7 @@ contract OpenEdenVault is
         uint256 shares,
         bytes32 requestId
     ) internal {
-        bytes memory data = abi.encode(investor, shares);
+        bytes memory data = abi.encode(investor, shares, requestId);
         _withdrawalQueue.pushBack(data);
         _transfer(investor, address(this), shares);
         emit UpdateQueueWithdrawal(investor, shares, requestId);
@@ -1930,9 +1938,9 @@ contract OpenEdenVault is
     function _processWithdrawalQueue(bytes32 requestId) internal {
         for (; !_withdrawalQueue.empty(); ) {
             bytes memory data = _withdrawalQueue.front();
-            (address investor, uint256 shares) = abi.decode(
+            (address investor, uint256 shares, bytes32 prevId) = abi.decode(
                 data,
-                (address, uint256)
+                (address, uint256, bytes32)
             );
 &nbsp;
             uint256 assets = previewRedeem(shares);
@@ -1951,7 +1959,13 @@ contract OpenEdenVault is
                 shares
             );
 &nbsp;
-            emit ProcessWithdrawalQueue(investor, assets, shares, requestId);
+            emit ProcessWithdrawalQueue(
+                investor,
+                assets,
+                shares,
+                requestId,
+                prevId
+            );
         }
     }
 &nbsp;
@@ -1974,7 +1988,7 @@ contract OpenEdenVault is
         return (assets * rate) / (365 * BPSUNIT);
     }
 &nbsp;
-    function claimOnchainServiceFee(uint256 amount) public onlyAdmin {
+    function claimOnchainServiceFee(uint256 amount) public onlyAdminOrOperator {
         require(_oplServiceProvider != address(0), "invalid opl address");
 &nbsp;
         _onchainFee -= amount;
@@ -1986,7 +2000,9 @@ contract OpenEdenVault is
         emit ClaimOnchainServiceFee(msg.sender, _oplServiceProvider, amount);
     }
 &nbsp;
-    function claimOffchainServiceFee(uint256 amount) public onlyAdmin {
+    function claimOffchainServiceFee(
+        uint256 amount
+    ) public onlyAdminOrOperator {
         require(_oplServiceProvider != address(0), "invalid opl address");
 &nbsp;
         _offchainFee -= amount;
@@ -2097,37 +2113,33 @@ contract OpenEdenVault is
 &nbsp;
     function setChainlinkOracleAddress(
         address newAddress
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setChainlinkOracleAddress(newAddress);
     }
 &nbsp;
-    function setChainlinkFee(
-        uint256 fee
-    ) external override onlyAdminOrOperator {
+    function setChainlinkFee(uint256 fee) external override onlyAdmin {
         super._setChainlinkFee(fee);
     }
 &nbsp;
-    function setChainlinkJobId(
-        bytes32 jobId
-    ) external override onlyAdminOrOperator {
+    function setChainlinkJobId(bytes32 jobId) external override onlyAdmin {
         super._setChainlinkJobId(jobId);
     }
 &nbsp;
     function setChainlinkURLData(
         string memory url
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setChainlinkURLData(url);
     }
 &nbsp;
     function setPathToOffchainAssets(
         string memory path
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setPathToOffchainAssets(path);
     }
 &nbsp;
     function setPathToTotalOffchainAssetAtLastClose(
         string memory path
-    ) external override onlyAdminOrOperator {
+    ) external override onlyAdmin {
         super._setPathToTotalOffchainAssetAtLastClose(path);
     }
 }
@@ -2137,7 +2149,7 @@ contract OpenEdenVault is
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 21 2023 21:59:13 GMT+0700 (Indochina Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed May 10 2023 09:39:07 GMT+0700 (Indochina Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

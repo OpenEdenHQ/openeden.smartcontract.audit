@@ -107,11 +107,10 @@ describe("OpenEden", async function () {
     await usdcTokenIns.connect(investor4).approve(openEdenVaultIns.address, initBalanceInvestor);
     await usdcTokenIns.connect(non_kyc).approve(openEdenVaultIns.address, initBalanceInvestor);
 
-    // 0: NON KYC, 1: GENERAL KYC 2: US KYC
-    await kycManagerIns.grantKyc(investor1.address, 2); // GENERAL_KYC
-    await kycManagerIns.grantKyc(investor2.address, 2);
-    await kycManagerIns.grantKyc(investor3.address, 2);
-    await kycManagerIns.grantKyc(investor4.address, 1); // US
+    // 0: NON KYC, 1: US KYC, 2: GENERAL KYC 
+    await kycManagerIns.grantKycInBulk([
+      investor1.address, investor2.address, investor3.address, investor4.address],
+      [2, 2, 2, 1]);
     await linkTokenIns.transfer(openEdenVaultIns.address, fundAmount);
     console.log("deployOpenEdenFixture over!");
   };
@@ -303,14 +302,14 @@ describe("OpenEden", async function () {
 
 
     it("not a kyc user", async function () {
-      await kycManagerIns.revokeKyc(investor1.address);
+      await kycManagerIns.revokeKycInBulk([investor1.address]);
       expect(openEdenVaultIns.connect(investor1).deposit(firstDepositAmount, investor1.address)).to.revertedWith("not a kyc user");
       expect(openEdenVaultIns.connect(non_kyc).deposit(firstDepositAmount, non_kyc.address)).to.revertedWith("not a kyc user");
     });
 
-    it("revoke kyc than grantKyc", async function () {
-      await kycManagerIns.revokeKyc(investor1.address);
-      await kycManagerIns.grantKyc(investor1.address, 1);
+    it("revoke kyc than grantKycInBulk", async function () {
+      await kycManagerIns.revokeKycInBulk([investor1.address]);
+      await kycManagerIns.grantKycInBulk([investor1.address], [1]);
       await deposit(investor1, firstDepositAmount, "0");
     });
 
@@ -339,7 +338,7 @@ describe("OpenEden", async function () {
     });
 
     it("Test case 8: Check if deposit is rejected for a non-KYC investor", async function () {
-      await kycManagerIns.revokeKyc(investor1.address);
+      await kycManagerIns.revokeKycInBulk([investor1.address]);
       await expect(deposit(investor1, firstDepositAmount, "0")).to.be.revertedWith("not a kyc user");
     });
 
@@ -362,18 +361,18 @@ describe("OpenEden", async function () {
   }
 
   async function setKyc(investor, kycType) {
-    await kycManagerIns.connect(owner).grantKyc(investor.address, kycType);
+    await kycManagerIns.connect(owner).grantKycInBulk([investor.address], [kycType]);
   }
   async function unsetKyc(investor) {
-    await kycManagerIns.connect(owner).revokeKyc(investor.address)
+    await kycManagerIns.connect(owner).revokeKycInBulk([investor.address])
   }
 
   async function banInvestor(investor) {
-    await kycManagerIns.connect(owner).banned(investor.address);
+    await kycManagerIns.connect(owner).bannedInBulk([investor.address]);
   }
 
   async function unbanInvestor(investor) {
-    await kycManagerIns.connect(owner).unBanned(investor.address);
+    await kycManagerIns.connect(owner).unBannedInBulk([investor.address]);
   }
 
   async function setStrict(status) {
